@@ -84,11 +84,20 @@ export const Form = ({
         textAlignVertical="top"
       />
 
-      <Text style={styles.label}>Date *</Text>
-      <DateSelector value={date} onChange={setDate} placeholder="Select date" />
-
-      <Text style={styles.label}>Time *</Text>
-      <TimeInput value={time} onChange={setTime} placeholder="hh:mm" />
+      <View style={styles.dateTimeRow}>
+        <View style={styles.dateTimeItem}>
+          <Text style={styles.label}>Date *</Text>
+          <DateSelector
+            value={date}
+            onChange={setDate}
+            placeholder="Select date"
+          />
+        </View>
+        <View style={styles.dateTimeItem}>
+          <Text style={styles.label}>Time *</Text>
+          <TimeInput value={time} onChange={setTime} placeholder="hh:mm" />
+        </View>
+      </View>
 
       <Text style={styles.label}>Address *</Text>
       <TextInput
@@ -112,63 +121,27 @@ export const Form = ({
       <ReminderSelector value={reminders} onChange={setReminders} />
 
       <View style={styles.buttonContainer}>
-        {mode === "add" ? (
-          <View style={styles.buttonRow}>
-            {onCancel && (
-              <View style={styles.buttonWrapper}>
-                <Button
-                  text="Cancel"
-                  variant="tertiary"
-                  onPress={onCancel}
-                  fullWidth
-                />
-              </View>
-            )}
+        <View style={styles.buttonRow}>
+          {onCancel && (
             <View style={styles.buttonWrapper}>
               <Button
-                text="Add"
-                variant="primary"
-                onPress={handleSave}
-                disabled={!isValid}
+                text="Cancel"
+                variant="tertiary"
+                onPress={onCancel}
                 fullWidth
               />
             </View>
+          )}
+          <View style={styles.buttonWrapper}>
+            <Button
+              text={mode === "add" ? "Add" : "Save"}
+              variant="primary"
+              onPress={handleSave}
+              disabled={!isValid}
+              fullWidth
+            />
           </View>
-        ) : (
-          <>
-            <View style={styles.buttonRow}>
-              {onCancel && (
-                <View style={styles.buttonWrapper}>
-                  <Button
-                    text="Cancel"
-                    variant="tertiary"
-                    onPress={onCancel}
-                    fullWidth
-                  />
-                </View>
-              )}
-              <View style={styles.buttonWrapper}>
-                <Button
-                  text="Save"
-                  variant="primary"
-                  onPress={handleSave}
-                  disabled={!isValid}
-                  fullWidth
-                />
-              </View>
-            </View>
-            {onDelete && (
-              <View style={styles.deleteButtonContainer}>
-                <Button
-                  text="Delete"
-                  variant="tertiary"
-                  onPress={onDelete}
-                  fullWidth
-                />
-              </View>
-            )}
-          </>
-        )}
+        </View>
       </View>
     </View>
   );

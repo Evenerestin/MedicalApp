@@ -79,12 +79,17 @@ export const DateSelector = ({
             style={styles.modalContainer}
             onStartShouldSetResponder={() => true}
           >
-            <Month
-              year={selectedDate?.getFullYear() || new Date().getFullYear()}
-              month={selectedDate?.getMonth() || new Date().getMonth()}
-              selectedDate={selectedDate}
-              onDayPress={handleDateSelect}
-            />
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Select Date</Text>
+            </View>
+            <View style={styles.modalContent}>
+              <Month
+                year={selectedDate?.getFullYear() || new Date().getFullYear()}
+                month={selectedDate?.getMonth() || new Date().getMonth()}
+                selectedDate={selectedDate}
+                onDayPress={handleDateSelect}
+              />
+            </View>
           </View>
         </TouchableOpacity>
       </Modal>

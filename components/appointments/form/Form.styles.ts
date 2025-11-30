@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#333333",
     marginBottom: 8,
-    marginTop: 12,  
+    marginTop: 12,
   },
   input: {
     borderWidth: 1,
@@ -25,6 +25,13 @@ export const styles = StyleSheet.create({
   textArea: {
     minHeight: 100,
     paddingTop: 10,
+  },
+  dateTimeRow: {
+    flexDirection: "row",
+    gap: 12,
+  },
+  dateTimeItem: {
+    flex: 1,
   },
   buttonContainer: {
     marginTop: 24,

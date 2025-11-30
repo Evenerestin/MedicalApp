@@ -42,4 +42,20 @@ export const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 8,
   },
+  modalHeader: {
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#e0e0e0",
+    backgroundColor: "#f8f9fa",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#152b4f",
+    textAlign: "center",
+  },
+  modalContent: {
+    padding: 8,
+  },
 });
