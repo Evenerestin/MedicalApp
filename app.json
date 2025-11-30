@@ -41,5 +41,12 @@
     "reactCompiler": true,
     "typedRoutes": true,
     "tsconfigPaths": true
-  }
+  },
+  "extra": {
+    "router": {},
+    "eas": {
+      "projectId": "328fbfaf-4d41-4525-a9c5-d62e87d1f938"
+    }
+  },
+  "owner": "evenerestin"
 }
