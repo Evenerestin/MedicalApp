@@ -57,6 +57,7 @@ export const styles = StyleSheet.create({
   // Month View Styles
   monthView: {
     backgroundColor: "#ffffff",
+    minHeight: 320,
   },
   weekdayRow: {
     flexDirection: "row",

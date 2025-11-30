@@ -52,6 +52,24 @@ export const Month = ({
 
   const weeks = generateCalendarDays();
 
+  // Always render 6 rows, filling with placeholder dates if needed
+  const weeksToRender = [...weeks];
+  if (weeksToRender.length < 6) {
+    const lastWeek = weeksToRender[weeksToRender.length - 1];
+    const lastDate = lastWeek[lastWeek.length - 1];
+    let nextDate = new Date(lastDate);
+    nextDate.setDate(nextDate.getDate() + 1);
+
+    while (weeksToRender.length < 6) {
+      const emptyWeek: Date[] = [];
+      for (let i = 0; i < 7; i++) {
+        emptyWeek.push(new Date(nextDate));
+        nextDate.setDate(nextDate.getDate() + 1);
+      }
+      weeksToRender.push(emptyWeek);
+    }
+  }
+
   return (
     <View style={styles.monthView}>
       {/* Weekday Headers */}
@@ -64,7 +82,7 @@ export const Month = ({
       </View>
 
       {/* Week Rows */}
-      {weeks.map((week, index) => (
+      {weeksToRender.map((week, index) => (
         <Week
           key={`week-${index}`}
           days={week}
