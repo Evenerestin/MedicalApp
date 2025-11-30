@@ -51,7 +51,6 @@ export const WithSelectedDate: Story = {
 export const WithEvents: Story = {
   args: {
     hasEvents: (date: Date) => {
-      // Mock events on 5th, 12th, 20th, and 28th of current month
       const day = date.getDate();
       return day === 5 || day === 12 || day === 20 || day === 28;
     },
@@ -62,7 +61,6 @@ export const WithEvents: Story = {
 export const WithDisabledDates: Story = {
   args: {
     isDisabled: (date: Date) => {
-      // Disable past dates
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       return date < today;

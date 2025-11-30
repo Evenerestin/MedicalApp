@@ -12,7 +12,6 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  // Size variants
   container_small: {
     paddingHorizontal: 16,
     paddingVertical: 6,
@@ -25,7 +24,6 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 32,
     paddingVertical: 14,
   },
-  // Variant styles
   container_primary: {
     backgroundColor: "#152b4f",
   },
@@ -45,7 +43,6 @@ export const styles = StyleSheet.create({
     alignSelf: "stretch",
     width: "100%",
   },
-  // Text styles
   text: {
     fontWeight: "600",
   },
@@ -70,7 +67,6 @@ export const styles = StyleSheet.create({
   text_disabled: {
     color: "#999999",
   },
-  // Icon spacing
   iconLeft: {
     marginRight: 8,
   },

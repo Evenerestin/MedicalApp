@@ -117,7 +117,6 @@ export const WithDateRange: Story = {
     const [selectedDate, setSelectedDate] = useState<Date | undefined>();
     const today = new Date();
 
-    // Disable dates outside 30-day range
     const isDisabled = (date: Date) => {
       const todayTime = new Date(today);
       todayTime.setHours(0, 0, 0, 0);
@@ -149,7 +148,7 @@ export const DifferentMonth: Story = {
     return (
       <Month
         year={2025}
-        month={0} // January
+        month={0}
         selectedDate={selectedDate}
         onDayPress={setSelectedDate}
       />

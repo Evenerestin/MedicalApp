@@ -19,10 +19,8 @@ export const TimeInput = ({
   const inputRef = useRef<TextInput>(null);
 
   const formatTime = (text: string) => {
-    // Remove all non-digit characters
     const digits = text.replace(/\D/g, "");
 
-    // Format as hh:mm
     if (digits.length === 0) return "";
     if (digits.length <= 2) return digits;
     if (digits.length <= 4) return `${digits.slice(0, 2)}:${digits.slice(2)}`;

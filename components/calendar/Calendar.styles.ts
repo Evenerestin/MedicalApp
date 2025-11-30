@@ -1,7 +1,6 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  // Day Cell Styles
   day: {
     flex: 1,
     aspectRatio: 1,
@@ -48,13 +47,11 @@ export const styles = StyleSheet.create({
     backgroundColor: "#4CAF50",
   },
 
-  // Week Row Styles
   week: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
 
-  // Month View Styles
   monthView: {
     backgroundColor: "#ffffff",
     minHeight: 320,
@@ -77,7 +74,6 @@ export const styles = StyleSheet.create({
     color: "#666666",
   },
 
-  // Calendar Header Styles
   header: {
     backgroundColor: "#ffffff",
     paddingVertical: 12,
@@ -112,7 +108,6 @@ export const styles = StyleSheet.create({
     gap: 8,
   },
 
-  // Modal Styles
   modalOverlay: {
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.5)",

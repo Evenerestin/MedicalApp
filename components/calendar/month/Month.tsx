@@ -24,11 +24,9 @@ export const Month = ({
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
 
-    // Find the first Sunday before or on the first day of the month
     const startDate = new Date(firstDay);
     startDate.setDate(startDate.getDate() - startDate.getDay());
 
-    // Find the last Saturday after or on the last day of the month
     const endDate = new Date(lastDay);
     endDate.setDate(endDate.getDate() + (6 - endDate.getDay()));
 
@@ -52,7 +50,6 @@ export const Month = ({
 
   const weeks = generateCalendarDays();
 
-  // Always render 6 rows, filling with placeholder dates if needed
   const weeksToRender = [...weeks];
   if (weeksToRender.length < 6) {
     const lastWeek = weeksToRender[weeksToRender.length - 1];
@@ -72,7 +69,6 @@ export const Month = ({
 
   return (
     <View style={styles.monthView}>
-      {/* Weekday Headers */}
       <View style={styles.weekdayRow}>
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
           <View key={day} style={styles.weekday}>
@@ -81,7 +77,6 @@ export const Month = ({
         ))}
       </View>
 
-      {/* Week Rows */}
       {weeksToRender.map((week, index) => (
         <Week
           key={`week-${index}`}
