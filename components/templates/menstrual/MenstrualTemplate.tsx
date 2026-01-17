@@ -1,0 +1,95 @@
+import { IconPlus } from "@tabler/icons-react-native";
+import { useRouter } from "expo-router";
+import React, { useState } from "react";
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { MenstrualCycle } from "../../../types";
+import { MenstrualCalendar } from "../../organisms/menstrual/MenstrualCalendar";
+
+const mockCycles: MenstrualCycle[] = [
+  {
+    id: "1",
+    userId: "user1",
+    startDate: new Date(Date.now() - 28 * 24 * 60 * 60 * 1000)
+      .toISOString()
+      .split("T")[0],
+    endDate: new Date(Date.now() - 24 * 24 * 60 * 60 * 1000)
+      .toISOString()
+      .split("T")[0],
+    cycleLength: 28,
+    periodLength: 5,
+    symptoms: ["cramps", "fatigue"],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+];
+
+export default function MenstrualScreen() {
+  const router = useRouter();
+  const [cycles, setCycles] = useState<MenstrualCycle[]>(mockCycles);
+
+  const handleAddNew = () => {
+    router.push("/health/menstrual");
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={{ height: 32 }} />
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Menstrual Calendar</Text>
+        <Text style={styles.headerSubtitle}>Track your cycle</Text>
+      </View>
+
+      <MenstrualCalendar cycles={cycles} />
+
+      <TouchableOpacity style={styles.fab} onPress={handleAddNew}>
+        <IconPlus size={28} color="#fff" />
+      </TouchableOpacity>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#f8f9fa",
+    paddingBottom: 96,
+  },
+  header: {
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    backgroundColor: "#fff",
+    borderBottomWidth: 1,
+    borderBottomColor: "#e0e0e0",
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 4,
+  },
+  headerSubtitle: {
+    fontSize: 14,
+    color: "#666",
+  },
+  fab: {
+    position: "absolute",
+    bottom: 24,
+    right: 24,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: "#1976d2",
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+});
