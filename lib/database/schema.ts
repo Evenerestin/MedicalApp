@@ -68,6 +68,8 @@ export const SCHEMA = {
       userId TEXT NOT NULL,
       type TEXT NOT NULL,
       value REAL NOT NULL,
+      secondaryValue REAL,
+      tertiaryValue REAL,
       unit TEXT,
       notes TEXT,
       timestamp TEXT NOT NULL,

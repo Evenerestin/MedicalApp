@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Calendar } from "../../molecules/calendar/Calendar";
 import {
   Appointment,
@@ -8,50 +9,56 @@ import {
 
 export interface CalendarViewProps {
   initialAppointments?: Appointment[];
+  onAddPress?: () => void;
+  onAppointmentPress?: (appointment: Appointment) => void;
 }
 
 export const CalendarView: React.FC<CalendarViewProps> = ({
   initialAppointments = [],
+  onAddPress,
+  onAppointmentPress,
 }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const formatDate = (date: Date) => date.toISOString().split("T")[0];
-  const appointmentsForDate = initialAppointments.filter(
-    (apt) =>
-      formatDate(selectedDate) ===
-      formatDate(
-        new Date(
-          apt.time ? `${formatDate(selectedDate)}T${apt.time}` : selectedDate,
-        ),
-      ),
-  );
+  const appointmentsForDate = initialAppointments.filter((apt) => {
+    if (!apt.time) return false;
+    const aptDate = apt.time.split("T")[0];
+    return aptDate === formatDate(selectedDate);
+  });
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
-      <View style={{ flex: 2 }}>
-        <Calendar
-          selectedDate={selectedDate}
-          onDayPress={setSelectedDate}
-          hasEvents={(date) =>
-            initialAppointments.some(
-              (apt) =>
-                formatDate(date) ===
-                formatDate(
-                  new Date(apt.time ? `${formatDate(date)}T${apt.time}` : date),
-                ),
-            )
-          }
-        />
-      </View>
-      <View style={{ flex: 1 }}>
-        <AppointmentsCard
-          date={selectedDate}
-          appointments={appointmentsForDate}
-          onAddPress={() => {}}
-          onAppointmentPress={() => {}}
-        />
-      </View>
-    </View>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
+        <View
+          style={{
+            flex: 1,
+            margin: 12,
+            display: "flex",
+            flexDirection: "column",
+            gap: 12,
+          }}
+        >
+          <Calendar
+            selectedDate={selectedDate}
+            onDayPress={setSelectedDate}
+            hasEvents={(date) =>
+              initialAppointments.some((apt) => {
+                if (!apt.time) return false;
+                const aptDate = apt.time.split("T")[0];
+                return aptDate === formatDate(date);
+              })
+            }
+          />
+          <AppointmentsCard
+            date={selectedDate}
+            appointments={appointmentsForDate}
+            onAddPress={onAddPress || (() => {})}
+            onAppointmentPress={onAppointmentPress || (() => {})}
+          />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

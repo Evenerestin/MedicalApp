@@ -1,7 +1,13 @@
 import {
   IconActivityHeartbeat,
+  IconDeviceFloppy,
+  IconEdit,
+  IconPlus,
+  IconX,
   IconProps as TablerIconProps,
 } from "@tabler/icons-react-native";
+import type { VariantType } from "@theme/variants";
+import getVariantConfig from "@theme/variants";
 import React from "react";
 import {
   ActivityIndicator,
@@ -13,66 +19,52 @@ import { styles } from "./ActionIcon.styles";
 
 export type ActionIconProps = {
   icon?: React.ReactElement;
+  preset?: "close" | "add" | "edit" | null;
   size?: "sm" | "md" | "lg";
-  variant?: "filled" | "light" | "outline" | "transparent";
+  variant?: VariantType;
+  color?: string;
   disabled?: boolean;
   rounded?: boolean;
   loading?: boolean;
   onPress?: () => void;
   style?: ViewStyle;
   testID?: string;
-  backgroundColor?: string;
   accessibilityLabel?: string;
 };
 
+import colors from "@theme/colors";
+
 export const ActionIcon: React.FC<ActionIconProps> = ({
   icon,
+  preset = null,
   size = "md",
   variant = "filled",
+  color,
   disabled = false,
   rounded = false,
-  loading = false,
   onPress,
-  style,
   testID,
   accessibilityLabel,
-  backgroundColor,
 }) => {
-  const handlePress = () => {
-    if (!disabled && !loading && onPress) {
-      onPress();
-    }
-  };
+  let accent = color || colors.primary;
+  const variantStyles = getVariantConfig(variant as VariantType, accent);
 
-  const getIconColor = () => {
-    switch (variant) {
-      case "filled":
-        return "#fff";
-      default:
-        return "#1976d2";
-    }
-  };
-
-  const getIconSize = () => {
-    switch (size) {
-      case "sm":
-        return 20;
-      case "md":
-        return 24;
-      case "lg":
-        return 28;
-      default:
-        return 24;
-    }
-  };
-
-  const renderIconContent = () => {
-    if (loading) {
-      return <ActivityIndicator size="small" color={getIconColor()} />;
+  const renderIcon = () => {
+    const iconSize = size === "sm" ? 16 : size === "md" ? 24 : 32;
+    const iconColor = variantStyles.icon;
+    if (preset) {
+      switch (preset) {
+        case "close":
+          return <IconX size={iconSize} color={iconColor} />;
+        case "add":
+          return <IconPlus size={iconSize} color={iconColor} />;
+        case "edit":
+          return <IconEdit size={iconSize} color={iconColor} />;
+        default:
+          break;
+      }
     }
     if (icon) {
-      const iconSize = getIconSize();
-      const iconColor = getIconColor();
       if (React.isValidElement<TablerIconProps>(icon)) {
         const existingProps = icon.props || {};
         const shouldApplyColor = !existingProps.color;
@@ -86,35 +78,37 @@ export const ActionIcon: React.FC<ActionIconProps> = ({
       }
       return icon;
     }
-    const color = getIconColor();
-    const sizeVal = getIconSize();
-    return <IconActivityHeartbeat size={sizeVal} color={color} />;
+    return <IconActivityHeartbeat size={iconSize} color={iconColor} />;
   };
 
-  const customBackgroundStyle = backgroundColor ? { backgroundColor } : {};
+  const handlePress = () => {
+    if (!disabled && onPress) {
+      onPress();
+    }
+  };
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={[
           styles.base,
-          styles[variant],
           styles[size],
           disabled && styles.disabled,
           rounded && styles.rounded,
-          loading && styles.loading,
-          customBackgroundStyle,
-          style,
+          {
+            backgroundColor: variantStyles.background,
+            borderColor: variantStyles.border,
+          },
         ]}
-        disabled={disabled || loading}
+        disabled={disabled}
         onPress={handlePress}
         accessibilityRole="button"
         accessibilityLabel={accessibilityLabel}
-        accessibilityState={{ disabled: disabled || loading }}
+        accessibilityState={{ disabled }}
         activeOpacity={0.7}
         testID={testID}
       >
-        {renderIconContent()}
+        {renderIcon()}
       </TouchableOpacity>
     </View>
   );

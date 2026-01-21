@@ -4,14 +4,13 @@ export const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
   },
-
   base: {
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 8,
+    borderWidth: 1,
     flexDirection: "row",
   },
-
   autoWidth: {
     alignSelf: "flex-start",
   },
@@ -19,7 +18,12 @@ export const styles = StyleSheet.create({
     width: "100%",
     flex: 1,
   },
-
+  rounded: {
+    borderRadius: 999,
+  },
+  disabled: {
+    opacity: 0.4,
+  },
   sm: {
     height: 36,
     paddingVertical: 6,
@@ -35,64 +39,10 @@ export const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 32,
   },
-
-  filled: {
-    backgroundColor: "#1976d2",
+  leftSection: {
+    marginRight: 6,
   },
-  light: {
-    backgroundColor: "rgba(25, 118, 210, 0.15)",
-    borderWidth: 2,
-    borderColor: "#1976d2",
-  },
-  outline: {
-    backgroundColor: "transparent",
-    borderWidth: 2,
-    borderColor: "#1976d2",
-  },
-  transparent: {
-    backgroundColor: "transparent",
-  },
-
-  text: {
-    fontWeight: "500",
-    textAlign: "center",
-    paddingBottom: 2,
-  },
-
-  textSm: {
-    fontSize: 14,
-  },
-  textMd: {
-    fontSize: 16,
-  },
-  textLg: {
-    fontSize: 18,
-  },
-
-  textFilled: {
-    color: "#fff",
-  },
-  textLight: {
-    color: "#1976d2",
-  },
-  textOutline: {
-    color: "#1976d2",
-  },
-  textTransparent: {
-    color: "#1976d2",
-  },
-
-  disabled: {
-    opacity: 0.5,
-  },
-  disabledText: {
-    color: "#999",
-  },
-  rounded: {
-    borderRadius: 9999,
-  },
-
-  loading: {
-    opacity: 0.7,
+  rightSection: {
+    marginLeft: 6,
   },
 });

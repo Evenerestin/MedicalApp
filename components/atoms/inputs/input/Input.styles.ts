@@ -3,12 +3,16 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   container: {
     width: "100%",
-    marginBottom: 16,
+    display: "flex",
+    flex: 1,
+    margin: 6,
+    marginBottom: 8,
   },
   label: {
     fontWeight: "600",
-    fontSize: 16,
+    fontSize: 14,
     marginBottom: 2,
+    color: "#222326",
   },
   required: {
     color: "#e53935",
@@ -23,26 +27,28 @@ export const styles = StyleSheet.create({
   inputWrapper: {
     flexDirection: "row",
     alignItems: "center",
-    borderWidth: 1.5,
-    borderRadius: 8,
+    borderWidth: 1,
     marginBottom: 2,
-    backgroundColor: "#fafafd",
     borderColor: "#e4e4ea",
+    borderRadius: 8,
+    backgroundColor: "#f3f3f6",
   },
   input: {
+    borderRadius: 8,
     flex: 1,
-    fontSize: 16,
-    backgroundColor: "transparent",
-    color: "#757575",
     borderWidth: 0,
-    borderColor: "transparent",
+    fontSize: 16,
+    paddingVertical: 10,
+    color: "#757575",
     outlineWidth: 0,
+    borderColor: "transparent",
     paddingHorizontal: 10,
   },
   leftSection: {
     marginRight: 8,
   },
   rightSection: {
+    padding: 0,
     marginLeft: 8,
   },
   error: {
@@ -53,6 +59,8 @@ export const styles = StyleSheet.create({
   },
   errorInput: {
     borderColor: "#e53935",
-    borderWidth: 1,
+  },
+  disabledInput: {
+    opacity: 0.6,
   },
 });

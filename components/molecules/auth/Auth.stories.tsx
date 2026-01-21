@@ -25,6 +25,19 @@ export const Login = () => {
   );
 };
 
+export const LoginWithError = () => {
+  return (
+    <View style={{ flex: 1 }}>
+      <LoginForm
+        error="Invalid email or password"
+        onSubmit={(data) => console.log("Login:", data)}
+        onForgotPassword={() => console.log("Forgot password")}
+        onSwitchToRegister={() => console.log("Switch to register")}
+      />
+    </View>
+  );
+};
+
 export const Register = () => {
   const [error, setError] = useState("");
 
@@ -37,19 +50,6 @@ export const Register = () => {
           setError("");
         }}
         onSwitchToLogin={() => console.log("Switch to login")}
-      />
-    </View>
-  );
-};
-
-export const LoginWithError = () => {
-  return (
-    <View style={{ flex: 1 }}>
-      <LoginForm
-        error="Invalid email or password"
-        onSubmit={(data) => console.log("Login:", data)}
-        onForgotPassword={() => console.log("Forgot password")}
-        onSwitchToRegister={() => console.log("Switch to register")}
       />
     </View>
   );

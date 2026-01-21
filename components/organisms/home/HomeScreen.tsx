@@ -1,6 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
+import { IconBell } from "@tabler/icons-react-native";
 import React from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import colors from "../../../theme/colors";
 import {
   Appointment,
   GlucoseMeasurement,
@@ -34,6 +36,7 @@ export interface HomeScreenProps {
   onAppointmentPress?: (appointment: Appointment) => void;
   onViewAllAppointments?: () => void;
   onViewAllMedications?: () => void;
+  onCyclePress?: () => void;
 }
 
 export const HomeScreen = ({
@@ -129,11 +132,11 @@ export const HomeScreen = ({
       onPress: onVitalsPress,
     },
     {
-      icon: "water",
-      label: "Glucose",
-      color: "#fff3e0",
-      iconColor: "#f57c00",
-      onPress: onGlucosePress,
+      icon: "calendar",
+      label: "Menstrual Cycle",
+      color: "#fce4ec",
+      iconColor: "#ec407a",
+      onPress: onICEPress,
     },
   ];
 
@@ -149,7 +152,7 @@ export const HomeScreen = ({
             style={styles.notificationButton}
             onPress={onNotificationsPress}
           >
-            <Ionicons name="notifications-outline" size={24} color="#ffffff" />
+            <IconBell size={24} color={colors.primary} />
             {notificationCount > 0 && (
               <View style={styles.notificationBadge}>
                 <Text style={styles.notificationBadgeText}>
@@ -251,7 +254,7 @@ export const HomeScreen = ({
                     )}
                     {appointment.address && (
                       <Text style={styles.appointmentLocation}>
-                        📍 {appointment.address}
+                        {appointment.address}
                       </Text>
                     )}
                   </View>

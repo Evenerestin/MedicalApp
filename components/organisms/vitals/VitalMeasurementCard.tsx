@@ -13,15 +13,12 @@ const vitalTypeConfig: Record<
   VitalType,
   { label: string; icon: string; color: string }
 > = {
-  blood_pressure: { label: "Blood Pressure", icon: "heart", color: "#e53935" },
-  heart_rate: { label: "Heart Rate", icon: "pulse", color: "#d81b60" },
-  temperature: { label: "Temperature", icon: "thermometer", color: "#fb8c00" },
+  blood_pressure: { label: "BP & HR", icon: "heart", color: "#e53935" },
   weight: { label: "Weight", icon: "scale", color: "#43a047" },
-  oxygen_saturation: { label: "SpO2", icon: "water", color: "#1e88e5" },
-  respiratory_rate: {
-    label: "Respiratory Rate",
-    icon: "fitness",
-    color: "#5e35b1",
+  glucose: {
+    label: "Glucose",
+    icon: "water",
+    color: "#fb8c00",
   },
 };
 
@@ -39,6 +36,12 @@ export const VitalMeasurementCard = ({
           <Text style={styles.measurementValueSecondary}>
             /{measurement.secondaryValue}
           </Text>
+          {measurement.tertiaryValue && (
+            <Text style={styles.measurementValueSecondary}>
+              {" "}
+              • {measurement.tertiaryValue} bpm
+            </Text>
+          )}
         </>
       );
     }

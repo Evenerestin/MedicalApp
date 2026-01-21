@@ -25,7 +25,7 @@ export const MenuTabs: React.FC<MenuTabsProps> = ({
       <MenuTabButton
         key={tab.key}
         icon={tab.icon}
-        label={tab.label}
+        alt={tab.label}
         active={tab.key === activeKey}
         onPress={() => onTabPress(tab.key)}
       />

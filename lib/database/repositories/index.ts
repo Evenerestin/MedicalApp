@@ -1,7 +1,4 @@
-/**
- * Database Repositories - Barrel Export
- */
-
+//barrel export
 export { AllergyRepository } from "./AllergyRepository";
 export { AppointmentRepository } from "./AppointmentRepository";
 export { GlucoseRepository } from "./GlucoseRepository";

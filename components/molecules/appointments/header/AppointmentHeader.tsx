@@ -1,6 +1,6 @@
-import { IconPlus } from "@tabler/icons-react-native";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
+import { ActionIcon } from "../../../atoms/buttons/actionicon/ActionIcon";
 import { appointmentHeaderStyles } from "./AppointmentHeader.styles";
 
 export interface AppointmentHeaderProps {
@@ -47,15 +47,7 @@ export const AppointmentHeader: React.FC<AppointmentHeaderProps> = ({
       <Text style={appointmentHeaderStyles.dateText}>
         {dayName}, {monthName} {dayNumber}, {year}
       </Text>
-      {onAddPress && (
-        <TouchableOpacity
-          style={appointmentHeaderStyles.addButton}
-          onPress={onAddPress}
-          activeOpacity={0.7}
-        >
-          <IconPlus size={20} color="#ffffff" />
-        </TouchableOpacity>
-      )}
+      {onAddPress && <ActionIcon preset="add" rounded onPress={onAddPress} />}
     </View>
   );
 };

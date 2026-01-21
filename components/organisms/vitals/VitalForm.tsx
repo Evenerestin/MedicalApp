@@ -14,6 +14,7 @@ export interface VitalFormData {
   type: VitalType;
   value: number;
   secondaryValue?: number;
+  tertiaryValue?: number;
   unit: string;
   notes?: string;
   measuredAt: string;
@@ -32,29 +33,25 @@ const vitalTypes: {
   unit: string;
   hasSecondary?: boolean;
   secondaryLabel?: string;
+  hasTertiary?: boolean;
+  tertiaryLabel?: string;
 }[] = [
   {
     type: "blood_pressure",
-    label: "Blood Pressure",
+    label: "Blood Pressure & Heart Rate",
     icon: "heart",
-    unit: "mmHg",
+    unit: "mmHg / bpm",
     hasSecondary: true,
     secondaryLabel: "Diastolic",
-  },
-  { type: "heart_rate", label: "Heart Rate", icon: "pulse", unit: "bpm" },
-  {
-    type: "temperature",
-    label: "Temperature",
-    icon: "thermometer",
-    unit: "°C",
+    hasTertiary: true,
+    tertiaryLabel: "Heart Rate",
   },
   { type: "weight", label: "Weight", icon: "scale", unit: "kg" },
-  { type: "oxygen_saturation", label: "SpO2", icon: "water", unit: "%" },
   {
-    type: "respiratory_rate",
-    label: "Respiratory Rate",
-    icon: "fitness",
-    unit: "breaths/min",
+    type: "glucose",
+    label: "Glucose",
+    icon: "water",
+    unit: "mg/dL",
   },
 ];
 
@@ -66,13 +63,15 @@ export const VitalForm = ({
   const [selectedType, setSelectedType] = useState<VitalType>("blood_pressure");
   const [value, setValue] = useState("");
   const [secondaryValue, setSecondaryValue] = useState("");
+  const [tertiaryValue, setTertiaryValue] = useState("");
   const [notes, setNotes] = useState("");
   const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const currentTypeConfig = vitalTypes.find((t) => t.type === selectedType);
   const isValid =
     value.trim() !== "" &&
-    (!currentTypeConfig?.hasSecondary || secondaryValue.trim() !== "");
+    (!currentTypeConfig?.hasSecondary || secondaryValue.trim() !== "") &&
+    (!currentTypeConfig?.hasTertiary || tertiaryValue.trim() !== "");
 
   const handleSave = () => {
     if (isValid && !isLoading) {
@@ -80,6 +79,7 @@ export const VitalForm = ({
         type: selectedType,
         value: parseFloat(value),
         secondaryValue: secondaryValue ? parseFloat(secondaryValue) : undefined,
+        tertiaryValue: tertiaryValue ? parseFloat(tertiaryValue) : undefined,
         unit: currentTypeConfig?.unit || "",
         notes: notes.trim() || undefined,
         measuredAt: new Date().toISOString(),
@@ -112,6 +112,7 @@ export const VitalForm = ({
                   setSelectedType(type.type);
                   setValue("");
                   setSecondaryValue("");
+                  setTertiaryValue("");
                 }}
                 disabled={isLoading}
               >
@@ -182,6 +183,30 @@ export const VitalForm = ({
               </View>
             )}
           </View>
+
+          {currentTypeConfig?.hasTertiary && (
+            <View style={styles.row}>
+              <View style={[styles.inputContainer, styles.halfInput]}>
+                <Text style={styles.label}>
+                  {currentTypeConfig.tertiaryLabel} *
+                </Text>
+                <TextInput
+                  style={[
+                    styles.input,
+                    focusedField === "tertiaryValue" && styles.inputFocused,
+                  ]}
+                  value={tertiaryValue}
+                  onChangeText={setTertiaryValue}
+                  placeholder={`Enter ${currentTypeConfig.tertiaryLabel?.toLowerCase()}`}
+                  placeholderTextColor="#999999"
+                  keyboardType="numeric"
+                  onFocus={() => setFocusedField("tertiaryValue")}
+                  onBlur={() => setFocusedField(null)}
+                  editable={!isLoading}
+                />
+              </View>
+            </View>
+          )}
 
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Unit</Text>

@@ -1,40 +1,31 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Menu } from "../../organisms/navigation/Menu";
 
-export default function HomeTemplate() {
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Welcome to MedicalApp</Text>
-        <Text style={styles.headerSubtitle}>Your health at a glance</Text>
-      </View>
-      <Menu onTabPress={() => {}} />
-    </SafeAreaView>
-  );
+interface HomeTemplateProps {
+  onTabPress: (key: string) => void;
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f8f9fa",
-    paddingBottom: 96,
-  },
-  header: {
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    backgroundColor: "#fff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#e0e0e0",
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#333",
-    marginBottom: 4,
-  },
-  headerSubtitle: {
-    fontSize: 14,
-    color: "#666",
-  },
-});
+const HomeTemplate: React.FC<HomeTemplateProps> = ({ onTabPress }) => {
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={{ flex: 1 }}>
+          <View
+            style={{
+              flex: 1,
+              margin: 12,
+              display: "flex",
+              flexDirection: "column",
+              gap: 12,
+            }}
+          ></View>
+          <Menu onTabPress={onTabPress} />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+export default HomeTemplate;

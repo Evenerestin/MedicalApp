@@ -45,7 +45,7 @@ export const AppointmentsCard: React.FC<AppointmentsCardProps> = ({
           />
         )}
         keyExtractor={(item) => item.id}
-        scrollEnabled={true}
+        scrollEnabled={false}
         contentContainerStyle={{ paddingBottom: 16 }}
       />
     </View>

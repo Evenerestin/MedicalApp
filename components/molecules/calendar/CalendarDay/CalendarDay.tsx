@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, TouchableOpacity } from "react-native";
+import { Text, TextStyle, TouchableOpacity, ViewStyle } from "react-native";
 import styles from "./CalendarDay.styles";
 
 interface CalendarDayProps {
@@ -17,38 +17,31 @@ export const CalendarDay: React.FC<CalendarDayProps> = ({
   isToday,
   onPress,
 }) => {
-  const isTodayAndSelected = isToday && isSelected;
+  const dayStyles: ViewStyle[] = [styles.day];
+  const textStyles: TextStyle[] = [styles.text];
+
+  if (isToday && isSelected) {
+    dayStyles.push(styles.filled);
+    textStyles.push(styles.textFilled);
+  } else if (isToday) {
+    dayStyles.push(styles.outline);
+    textStyles.push(styles.textOutline);
+  } else if (isSelected) {
+    dayStyles.push(styles.light);
+    textStyles.push(styles.textLight);
+  }
+
+  if (!isCurrentMonth) {
+    dayStyles.push(styles.outside);
+  }
 
   return (
     <TouchableOpacity
-      style={[
-        styles.day,
-        isTodayAndSelected
-          ? styles.todaySelected
-          : isSelected
-          ? styles.selected
-          : isToday
-          ? styles.today
-          : null,
-        !isCurrentMonth && styles.outside,
-      ]}
+      style={dayStyles}
       onPress={onPress}
       disabled={!isCurrentMonth}
     >
-      <Text
-        style={[
-          styles.text,
-          isTodayAndSelected
-            ? styles.textTodaySelected
-            : isSelected
-            ? styles.textSelected
-            : isToday
-            ? styles.textToday
-            : null,
-        ]}
-      >
-        {date.getDate()}
-      </Text>
+      <Text style={textStyles}>{date.getDate()}</Text>
     </TouchableOpacity>
   );
 };

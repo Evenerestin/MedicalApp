@@ -3,12 +3,12 @@ import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   FlatList,
-  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Medication } from "../../../types";
 
 const mockMedications: Medication[] = [
@@ -91,7 +91,6 @@ export default function MedicationsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ height: 32 }} />
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Medications</Text>
         <Text style={styles.headerSubtitle}>

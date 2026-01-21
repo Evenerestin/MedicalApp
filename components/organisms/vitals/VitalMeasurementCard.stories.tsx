@@ -13,7 +13,7 @@ export default meta;
 
 type Story = StoryObj<typeof VitalMeasurementCard>;
 
-export const BloodPressure: Story = {
+export const BloodPressureWithHeartRate: Story = {
   args: {
     measurement: {
       id: "1",
@@ -21,37 +21,10 @@ export const BloodPressure: Story = {
       type: "blood_pressure",
       value: 120,
       secondaryValue: 80,
-      unit: "mmHg",
-      measuredAt: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
-    },
-  },
-};
-
-export const HeartRate: Story = {
-  args: {
-    measurement: {
-      id: "2",
-      userId: "user1",
-      type: "heart_rate",
-      value: 72,
-      unit: "bpm",
+      tertiaryValue: 72,
+      unit: "mmHg / bpm",
       measuredAt: new Date().toISOString(),
       notes: "After morning walk",
-      createdAt: new Date().toISOString(),
-    },
-  },
-};
-
-export const Temperature: Story = {
-  args: {
-    measurement: {
-      id: "3",
-      userId: "user1",
-      type: "temperature",
-      value: 36.6,
-      unit: "°C",
-      measuredAt: new Date().toISOString(),
       createdAt: new Date().toISOString(),
     },
   },
@@ -60,7 +33,7 @@ export const Temperature: Story = {
 export const Weight: Story = {
   args: {
     measurement: {
-      id: "4",
+      id: "2",
       userId: "user1",
       type: "weight",
       value: 75.5,
@@ -71,14 +44,14 @@ export const Weight: Story = {
   },
 };
 
-export const OxygenSaturation: Story = {
+export const Glucose: Story = {
   args: {
     measurement: {
-      id: "5",
+      id: "3",
       userId: "user1",
-      type: "oxygen_saturation",
-      value: 98,
-      unit: "%",
+      type: "glucose",
+      value: 110,
+      unit: "mg/dL",
       measuredAt: new Date().toISOString(),
       createdAt: new Date().toISOString(),
     },

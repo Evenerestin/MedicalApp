@@ -3,6 +3,7 @@ import {
   IconEyeOff,
   IconLock,
   IconMail,
+  IconMedicalCross,
   IconUser,
 } from "@tabler/icons-react-native";
 import React, { useState } from "react";
@@ -11,10 +12,10 @@ import {
   Platform,
   ScrollView,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Input } from "../../atoms/inputs/input/Input";
 import { authStyles } from "./Auth.styles";
 
 export interface RegisterFormData {
@@ -92,8 +93,11 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
         keyboardShouldPersistTaps="handled"
       >
         <View style={authStyles.headerContainer}>
-          <Text style={authStyles.appName}>Zdrowie24</Text>
-          <Text style={authStyles.appTagline}>Create your health account</Text>
+          <View style={authStyles.logoContainer}>
+            <IconMedicalCross size={60} color="#1976d2" />
+            <Text style={authStyles.appName}>App</Text>
+          </View>
+          <Text style={authStyles.appTagline}>Desc</Text>
         </View>
 
         <View style={authStyles.formContainer}>
@@ -107,112 +111,58 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
           )}
 
           <View style={authStyles.section}>
-            <Text style={authStyles.label}>First Name</Text>
-            <View style={authStyles.passwordContainer}>
-              <IconUser size={20} color="#1976d2" style={{ marginRight: 8 }} />
-              <TextInput
-                style={authStyles.passwordInput}
-                value={firstName}
-                onChangeText={setFirstName}
-                placeholder="Enter your first name"
-                placeholderTextColor="#999"
-                editable={!isLoading}
-              />
+            <View style={{ flexDirection: "row", gap: 8 }}>
+            <Input
+              label="First Name"
+              value={firstName}
+              onChangeText={setFirstName}
+              placeholder="Enter your first name"
+              disabled={isLoading}
+              leftSection={<IconUser size={20} color="#1976d2" />}
+            />
+
+            <Input
+              label="Last Name"
+              value={lastName}
+              onChangeText={setLastName}
+              placeholder="Enter your last name"
+              disabled={isLoading}
+              leftSection={<IconUser size={20} color="#1976d2" />}
+            />
             </View>
+
+            <Input
+              label="Email Address"
+              value={email}
+              onChangeText={setEmail}
+              placeholder="Enter your email"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              disabled={isLoading}
+              leftSection={<IconMail size={20} color="#1976d2" />}
+            />
           </View>
 
           <View style={authStyles.section}>
-            <Text style={authStyles.label}>Last Name</Text>
-            <View style={authStyles.passwordContainer}>
-              <IconUser size={20} color="#1976d2" style={{ marginRight: 8 }} />
-              <TextInput
-                style={authStyles.passwordInput}
-                value={lastName}
-                onChangeText={setLastName}
-                placeholder="Enter your last name"
-                placeholderTextColor="#999"
-                editable={!isLoading}
-              />
-            </View>
-          </View>
-
-          <View style={authStyles.section}>
-            <Text style={authStyles.label}>Email Address</Text>
-            <View style={authStyles.passwordContainer}>
-              <IconMail size={20} color="#1976d2" style={{ marginRight: 8 }} />
-              <TextInput
-                style={authStyles.passwordInput}
-                value={email}
-                onChangeText={setEmail}
-                placeholder="Enter your email"
-                placeholderTextColor="#999"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                editable={!isLoading}
-              />
-            </View>
-          </View>
-
-          <View style={authStyles.section}>
-            <Text style={authStyles.label}>Password</Text>
-            <View style={authStyles.passwordContainer}>
-              <IconLock size={20} color="#1976d2" style={{ marginRight: 8 }} />
-              <TextInput
-                style={authStyles.passwordInput}
-                value={password}
-                onChangeText={handlePasswordChange}
-                placeholder="Enter your password"
-                placeholderTextColor="#999"
-                secureTextEntry={!showPassword}
-                editable={!isLoading}
-              />
-              <TouchableOpacity
-                style={authStyles.passwordToggle}
-                onPress={() => setShowPassword(!showPassword)}
-                disabled={isLoading}
-              >
-                {showPassword ? (
-                  <IconEyeOff size={20} color="#666" />
-                ) : (
-                  <IconEye size={20} color="#666" />
-                )}
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          <View style={authStyles.section}>
-            <Text style={authStyles.label}>Confirm Password</Text>
-            <View
-              style={[
-                authStyles.passwordContainer,
-                passwordError && authStyles.inputError,
-              ]}
-            >
-              <IconLock size={20} color="#1976d2" style={{ marginRight: 8 }} />
-              <TextInput
-                style={authStyles.passwordInput}
-                value={confirmPassword}
-                onChangeText={handleConfirmPasswordChange}
-                placeholder="Confirm your password"
-                placeholderTextColor="#999"
-                secureTextEntry={!showConfirmPassword}
-                editable={!isLoading}
-              />
-              <TouchableOpacity
-                style={authStyles.passwordToggle}
-                onPress={() => setShowConfirmPassword(!showConfirmPassword)}
-                disabled={isLoading}
-              >
-                {showConfirmPassword ? (
-                  <IconEyeOff size={20} color="#666" />
-                ) : (
-                  <IconEye size={20} color="#666" />
-                )}
-              </TouchableOpacity>
-            </View>
-            {passwordError && (
-              <Text style={authStyles.errorText}>{passwordError}</Text>
-            )}
+            <Input
+              label="Password"
+              value={password}
+              onChangeText={handlePasswordChange}
+              placeholder="Enter your password"
+              secureTextEntry={!showPassword}
+              autoCapitalize="none"
+              disabled={isLoading}
+            />
+            <Input
+              label="Confirm Password"
+              value={confirmPassword}
+              onChangeText={handleConfirmPasswordChange}
+              placeholder="Confirm your password"
+              secureTextEntry={!showConfirmPassword}
+              autoCapitalize="none"
+              disabled={isLoading}
+              error={passwordError}
+            />
           </View>
 
           <TouchableOpacity

@@ -6,4 +6,4 @@ export default {
   component: HomeTemplate,
 };
 
-export const Default = () => <HomeTemplate />;
+export const Default = () => <HomeTemplate onTabPress={() => {}} />;

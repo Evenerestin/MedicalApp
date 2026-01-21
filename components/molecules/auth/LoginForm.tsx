@@ -3,6 +3,7 @@ import {
   IconEyeOff,
   IconLock,
   IconMail,
+  IconMedicalCross,
 } from "@tabler/icons-react-native";
 import React, { useState } from "react";
 import {
@@ -10,10 +11,10 @@ import {
   Platform,
   ScrollView,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Input } from "../../atoms/inputs/input/Input";
 import { authStyles } from "./Auth.styles";
 
 export interface LoginFormData {
@@ -39,14 +40,12 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [emailFocused, setEmailFocused] = useState(false);
-  const [passwordFocused, setPasswordFocused] = useState(false);
 
   const isValid = email.trim() !== "" && password.trim() !== "";
 
   const handleSubmit = () => {
     if (isValid && !isLoading) {
-      onSubmit?.({ email: email.trim(), password });
+      onSubmit?.({ email: email.trim(), password: password.trim() });
     }
   };
 
@@ -60,8 +59,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         keyboardShouldPersistTaps="handled"
       >
         <View style={authStyles.headerContainer}>
-          <Text style={authStyles.appName}>Zdrowie24</Text>
-          <Text style={authStyles.appTagline}>Your health companion</Text>
+          <View style={authStyles.logoContainer}>
+            <IconMedicalCross size={60} color="#1976d2" />
+            <Text style={authStyles.appName}>App</Text>
+          </View>
+          <Text style={authStyles.appTagline}>Desc</Text>
         </View>
 
         <View style={authStyles.formContainer}>
@@ -75,61 +77,36 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           )}
 
           <View style={authStyles.section}>
-            <Text style={authStyles.label}>Email Address</Text>
-            <View
-              style={[
-                authStyles.passwordContainer,
-                emailFocused && authStyles.inputFocused,
-              ]}
-            >
-              <IconMail size={20} color="#1976d2" style={{ marginRight: 8 }} />
-              <TextInput
-                style={authStyles.passwordInput}
-                value={email}
-                onChangeText={setEmail}
-                onFocus={() => setEmailFocused(true)}
-                onBlur={() => setEmailFocused(false)}
-                placeholder="Enter your email"
-                placeholderTextColor="#999"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                editable={!isLoading}
-              />
-            </View>
-          </View>
-
-          <View style={authStyles.section}>
-            <Text style={authStyles.label}>Password</Text>
-            <View
-              style={[
-                authStyles.passwordContainer,
-                passwordFocused && authStyles.inputFocused,
-              ]}
-            >
-              <IconLock size={20} color="#1976d2" style={{ marginRight: 8 }} />
-              <TextInput
-                style={authStyles.passwordInput}
-                value={password}
-                onChangeText={setPassword}
-                onFocus={() => setPasswordFocused(true)}
-                onBlur={() => setPasswordFocused(false)}
-                placeholder="Enter your password"
-                placeholderTextColor="#999"
-                secureTextEntry={!showPassword}
-                editable={!isLoading}
-              />
-              <TouchableOpacity
-                style={authStyles.passwordToggle}
-                onPress={() => setShowPassword(!showPassword)}
-                disabled={isLoading}
-              >
-                {showPassword ? (
-                  <IconEyeOff size={20} color="#666" />
-                ) : (
-                  <IconEye size={20} color="#666" />
-                )}
-              </TouchableOpacity>
-            </View>
+            <Input
+              label="Email Address"
+              value={email}
+              onChangeText={setEmail}
+              placeholder="Enter your email"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              disabled={isLoading}
+              leftSection={<IconMail size={20} color="#1976d2" />}
+            />
+            <Input
+              label="Password"
+              value={password}
+              onChangeText={setPassword}
+              placeholder="Enter your password"
+              secureTextEntry={!showPassword}
+              autoCapitalize="none"
+              disabled={isLoading}
+              rightSection={
+                <TouchableOpacity
+                  onPress={() => setShowPassword((prev) => !prev)}
+                >
+                  {showPassword ? (
+                    <IconEyeOff size={20} color="#1976d2" />
+                  ) : (
+                    <IconEye size={20} color="#1976d2" />
+                  )}
+                </TouchableOpacity>
+              }
+            />
           </View>
 
           <TouchableOpacity

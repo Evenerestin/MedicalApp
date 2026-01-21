@@ -1,13 +1,8 @@
 import { IconPlus } from "@tabler/icons-react-native";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { GlucoseMeasurement } from "../../../types";
 import { GlucoseHistory } from "../../organisms/glucose/GlucoseHistory";
 
@@ -45,7 +40,6 @@ export default function GlucoseScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ height: 32 }} />
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Glucose Diary</Text>
         <Text style={styles.headerSubtitle}>

@@ -1,13 +1,8 @@
 import { IconPlus } from "@tabler/icons-react-native";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { VitalMeasurement } from "../../../types";
 import { VitalsHistory } from "../../organisms/vitals/VitalsHistory";
 
@@ -44,7 +39,6 @@ export default function VitalsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ height: 32 }} />
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Vital Parameters</Text>
         <Text style={styles.headerSubtitle}>

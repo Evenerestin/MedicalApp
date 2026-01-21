@@ -8,119 +8,98 @@ import {
   View,
   ViewStyle,
 } from "react-native";
+
 import { styles } from "./Button.styles";
 
 export type ButtonProps = {
   label: string;
   size?: "sm" | "md" | "lg";
-  variant?: "filled" | "light" | "outline" | "transparent";
+  variant?: VariantType;
+  color?: string;
+  style?: ViewStyle;
   fullWidth?: boolean;
   disabled?: boolean;
   rounded?: boolean;
-  loading?: boolean;
   onPress?: () => void;
-  style?: ViewStyle;
   textStyle?: TextStyle;
   testID?: string;
   accessibilityLabel?: string;
-  leftSection?: React.ReactElement;
-  rightSection?: React.ReactElement;
+  leftSection?: React.ReactElement<any>;
+  rightSection?: React.ReactElement<any>;
 };
+
+import colors from "@theme/colors";
+import type { VariantType } from "@theme/variants";
+import getVariantConfig from "@theme/variants";
 
 export const Button: React.FC<ButtonProps> = ({
   label = "Button",
   size = "md",
   variant = "filled",
+  color,
   fullWidth = false,
   disabled = false,
   rounded = false,
-  loading = false,
   onPress,
   style,
-  textStyle,
   testID,
   accessibilityLabel,
   leftSection,
   rightSection,
 }) => {
-  const textVariantStyle = {
-    filled: styles.textFilled,
-    light: styles.textLight,
-    outline: styles.textOutline,
-    transparent: styles.textTransparent,
-  }[variant];
-
-  const textSizeStyle = {
-    sm: styles.textSm,
-    md: styles.textMd,
-    lg: styles.textLg,
-  }[size];
-
-  const textDisabledStyle = {};
+  const accent = color || colors.primary;
+  const variantStyles = getVariantConfig(variant as VariantType, accent);
 
   const handlePress = () => {
-    if (!disabled && !loading && onPress) {
+    if (!disabled && onPress) {
       onPress();
     }
   };
-
-  const accessibilityLabelText = accessibilityLabel || label;
 
   return (
     <View style={[styles.container, fullWidth && styles.fullWidth]}>
       <TouchableOpacity
         style={[
           styles.base,
-          styles[variant],
+          {
+            backgroundColor: variantStyles.background,
+            borderColor: variantStyles.border,
+          },
+          rounded ? styles.rounded : null,
+          disabled ? styles.disabled : null,
           styles[size],
           fullWidth ? styles.fullWidth : styles.autoWidth,
-          disabled && styles.disabled,
-          rounded && styles.rounded,
-          loading && styles.loading,
           style,
         ]}
-        disabled={disabled || loading}
+        disabled={disabled}
         onPress={handlePress}
         accessibilityRole="button"
-        accessibilityLabel={accessibilityLabelText}
-        accessibilityState={{ disabled: disabled || loading }}
+        accessibilityLabel={accessibilityLabel}
+        accessibilityState={{ disabled: disabled }}
         activeOpacity={0.8}
         testID={testID}
       >
-        {loading ? (
-          <ActivityIndicator
-            size="small"
-            color={variant === "filled" ? "#fff" : "#1976d2"}
-          />
-        ) : (
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {leftSection ? (
+            <View style={styles.leftSection}>{leftSection}</View>
+          ) : null}
+          <Text
+            style={[{ color: variantStyles.text }]}
+            numberOfLines={1}
+            ellipsizeMode="tail"
           >
-            {leftSection ? (
-              <View style={{ marginRight: 6 }}>{leftSection}</View>
-            ) : null}
-            <Text
-              style={[
-                styles.text,
-                textVariantStyle,
-                textSizeStyle,
-                textDisabledStyle,
-                textStyle,
-              ]}
-              numberOfLines={1}
-              ellipsizeMode="tail"
-            >
-              {label}
-            </Text>
-            {rightSection ? (
-              <View style={{ marginLeft: 6 }}>{rightSection}</View>
-            ) : null}
-          </View>
-        )}
+            {label}
+          </Text>
+          {rightSection ? (
+            <View style={styles.rightSection}>{rightSection}</View>
+          ) : null}
+        </View>
       </TouchableOpacity>
     </View>
   );

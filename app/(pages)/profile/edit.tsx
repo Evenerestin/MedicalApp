@@ -1,7 +1,6 @@
 import { useRouter } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { ProfileEdit } from "../../../components/auth";
 import { useAppDispatch, useUser } from "../../../context/AppContext";
 import { User } from "../../../types";
 
@@ -38,12 +37,13 @@ export default function EditProfilePage() {
   };
 
   return (
-    <ProfileEdit
-      user={user}
-      onSave={handleSave}
-      onBack={handleBack}
-      onLogout={handleLogout}
-    />
+    <></>
+    // <ProfileEdit
+    //   user={user}
+    //   onSave={handleSave}
+    //   onBack={handleBack}
+    //   onLogout={handleLogout}
+    // />
   );
 }
 

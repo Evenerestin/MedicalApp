@@ -1,5 +1,6 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { ICEProfile } from "../../../types";
 import { ICEProfileView } from "../../organisms/ice/ICEProfileView";
 
@@ -43,7 +44,6 @@ export const ICETemplate: React.FC<ICETemplateProps> = ({
 }) => {
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ height: 32 }} />
       {profile ? (
         <ICEProfileView profile={profile} onEdit={onEdit} onBack={onBack} />
       ) : (

@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
+import colors from "@theme/colors";
 import React from "react";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 import { Button } from "./Button";
 
 const meta: Meta<typeof Button> = {
-  title: "Atoms/Buttons/Button/Base",
+  title: "Atoms/Buttons/Button",
   component: Button,
   parameters: { docs: { autodocs: true } },
 };
@@ -18,23 +19,20 @@ export const Base: StoryObj<typeof Button> = {
   },
 };
 
-export const Loading: StoryObj<typeof Button> = {
+export const Rounded: StoryObj<typeof Button> = {
   args: {
-    label: "Loading",
+    label: "Rounded Button",
     variant: "filled",
     size: "md",
-    disabled: true,
-    loading: true,
+    rounded: true,
   },
 };
 
-export const LoadingRounded: StoryObj<typeof Button> = {
+export const Disabled: StoryObj<typeof Button> = {
   args: {
-    label: "Loading Rounded",
+    label: "Disabled Button",
     variant: "filled",
     size: "md",
     disabled: true,
-    loading: true,
-    style: { borderRadius: 50 },
   },
 };

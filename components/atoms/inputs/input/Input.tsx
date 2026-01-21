@@ -3,7 +3,6 @@ import React from "react";
 import { Text, TextInput, TextInputProps, View, ViewStyle } from "react-native";
 import { ActionIcon } from "../../buttons/actionicon/ActionIcon";
 import { styles } from "./Input.styles";
-import { LoadingDots } from "./LoadingDots";
 
 export type InputProps = TextInputProps & {
   label?: string;
@@ -21,37 +20,25 @@ export type InputProps = TextInputProps & {
   onClear?: () => void;
 };
 
-const sizeMap = { sm: 36, md: 44, lg: 52 };
-
 export const Input: React.FC<InputProps> = ({
   label,
+  error,
   required,
   description,
-  error,
   leftSection,
   rightSection,
   size = "md",
   variant = "outline",
-  loading = false,
+  clearable = false,
   disabled = false,
   style,
-  clearable = false,
   onClear,
   value,
   onChangeText,
   ...props
 }) => {
   const inputRef = React.useRef<TextInput>(null);
-  const inputHeight = sizeMap[size] || 44;
-  const borderColor = error
-    ? "#e53935"
-    : variant === "filled"
-    ? "#1976d2"
-    : variant === "light"
-    ? "#90caf9"
-    : "#bdbdbd";
-  const backgroundColor =
-    variant === "filled" ? "#e3f2fd" : variant === "light" ? "#f5f5f5" : "#fff";
+  const [isFocused, setIsFocused] = React.useState(false);
 
   return (
     <View style={[styles.container, style]}>
@@ -67,31 +54,11 @@ export const Input: React.FC<InputProps> = ({
       <View
         style={[
           styles.inputWrapper,
-          {
-            borderColor,
-            backgroundColor,
-            height: inputHeight,
-            opacity: disabled ? 0.5 : 1,
-          },
-          error && styles.errorInput,
+          isFocused && { borderColor: "#007AFF" },
+          error && { borderColor: "#e53935" },
+          disabled && styles.disabledInput,
         ]}
       >
-        {loading && (
-          <View
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 16,
-              alignItems: "center",
-              justifyContent: "center",
-              zIndex: 2,
-              height: inputHeight,
-              backgroundColor: "transparent",
-            }}
-          >
-            <LoadingDots size={12} />
-          </View>
-        )}
         {React.isValidElement(leftSection) && (
           <View style={styles.leftSection}>
             <ActionIcon icon={leftSection} variant="transparent" size={size} />
@@ -99,27 +66,26 @@ export const Input: React.FC<InputProps> = ({
         )}
         <TextInput
           ref={inputRef}
-          style={[
-            styles.input,
-            {
-              height: inputHeight,
-              outlineWidth: 0,
-              outlineColor: "transparent",
-              ...(loading ? { color: "transparent" } : {}),
-            },
-          ]}
-          editable={!disabled && !loading}
-          placeholder={loading ? "" : props?.placeholder}
-          placeholderTextColor={loading ? "transparent" : "#ccccd6"}
-          value={loading ? "" : value}
-          selectionColor={loading ? "transparent" : undefined}
+          style={styles.input}
+          editable={!disabled}
+          placeholder={props?.placeholder}
+          placeholderTextColor={"#ccccd6"}
+          value={value}
           onChangeText={onChangeText}
+          onFocus={(e) => {
+            setIsFocused(true);
+            props.onFocus?.(e);
+          }}
+          onBlur={(e) => {
+            setIsFocused(false);
+            props.onBlur?.(e);
+          }}
           {...props}
         />
         {clearable ? (
           <View style={styles.rightSection}>
             <ActionIcon
-              icon={<IconX size={20} />}
+              icon={<IconX size={14} />}
               variant="transparent"
               size={size}
               onPress={() => {

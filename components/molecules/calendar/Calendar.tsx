@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Modal, View } from "react-native";
 import { CalendarMonthPickerModal } from "../../atoms/inputs/picker/calendarMonth/CalendarMonthPickerModal";
 import { CalendarYearPickerModal } from "../../atoms/inputs/picker/calendarYear/CalendarYearPickerModal";
+import { styles } from "./Calendar.styles";
 import { CalendarGrid } from "./CalendarGrid/CalendarGrid";
 import { CalendarHeader } from "./CalendarHeader/CalendarHeader";
 
@@ -20,7 +21,7 @@ const months = [
   "December",
 ];
 
-  export interface CalendarProps {
+export interface CalendarProps {
   selectedDate?: Date;
   onDayPress?: (date: Date) => void;
   hasEvents?: (date: Date) => boolean;
@@ -31,10 +32,11 @@ export const Calendar: React.FC<CalendarProps> = ({
   onDayPress,
   hasEvents,
 }) => {
-  const today = controlledDate || new Date();
-  const [month, setMonth] = useState(today.getMonth());
-  const [year, setYear] = useState(today.getFullYear());
-  const [selectedDate, setSelectedDate] = useState(today);
+  const today = new Date();
+  const initialDate = controlledDate || today;
+  const [month, setMonth] = useState(initialDate.getMonth());
+  const [year, setYear] = useState(initialDate.getFullYear());
+  const [selectedDate, setSelectedDate] = useState(initialDate);
   const [monthPickerOpen, setMonthPickerOpen] = useState(false);
   const [yearPickerOpen, setYearPickerOpen] = useState(false);
 
@@ -55,14 +57,12 @@ export const Calendar: React.FC<CalendarProps> = ({
       date,
       isCurrentMonth: date.getMonth() === month,
       isSelected: date.toDateString() === effectiveSelectedDate.toDateString(),
-      isToday:
-        date.toDateString() ===
-        (controlledDate ? controlledDate.toDateString() : today.toDateString()),
+      isToday: date.toDateString() === today.toDateString(),
     });
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <CalendarHeader
         month={months[month]}
         year={year}

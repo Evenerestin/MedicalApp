@@ -77,19 +77,14 @@ export interface VitalMeasurement {
   type: VitalType;
   value: number;
   secondaryValue?: number;
+  tertiaryValue?: number;
   unit: string;
   measuredAt: string;
   notes?: string;
   createdAt: string;
 }
 
-export type VitalType =
-  | "blood_pressure"
-  | "heart_rate"
-  | "temperature"
-  | "weight"
-  | "oxygen_saturation"
-  | "respiratory_rate";
+export type VitalType = "blood_pressure" | "weight" | "glucose";
 
 export interface VitalTypeConfig {
   type: VitalType;
@@ -127,7 +122,6 @@ export type GlucoseTag =
 
 export type InsulinType = "rapid" | "short" | "intermediate" | "long" | "mixed";
 
-// Allergies Types
 export interface Allergy {
   id: string;
   userId: string;

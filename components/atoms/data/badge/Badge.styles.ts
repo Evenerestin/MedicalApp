@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-export const badgeStyles = StyleSheet.create({
+export const styles = StyleSheet.create({
   base: {
     borderRadius: 999,
     alignSelf: "flex-start",
@@ -13,5 +13,26 @@ export const badgeStyles = StyleSheet.create({
   text: {
     fontWeight: "600",
     textAlign: "center",
+  },
+  leftSection: {
+    marginRight: 6,
+  },
+  rightSection: {
+    marginLeft: 6,
+  },
+  sm: {
+    height: 20,
+    paddingHorizontal: 8,
+    fontSize: 12,
+  },
+  md: {
+    height: 26,
+    paddingHorizontal: 12,
+    fontSize: 14,
+  },
+  lg: {
+    height: 32,
+    paddingHorizontal: 16,
+    fontSize: 16,
   },
 });

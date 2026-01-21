@@ -1,5 +1,6 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Menu } from "../organisms/navigation/Menu";
 
 export interface AppTemplateProps {
@@ -27,7 +28,6 @@ export const AppTemplate = ({
 }: AppTemplateProps) => {
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ height: 32 }} />
       <View style={styles.content}>{children}</View>
       <Menu
         initialActiveTabKey={initialActiveTabKey}

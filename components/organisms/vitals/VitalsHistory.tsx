@@ -14,11 +14,9 @@ export interface VitalsHistoryProps {
 
 const vitalTabs: { type: VitalType | "all"; label: string }[] = [
   { type: "all", label: "All" },
-  { type: "blood_pressure", label: "BP" },
-  { type: "heart_rate", label: "HR" },
-  { type: "temperature", label: "Temp" },
+  { type: "blood_pressure", label: "BP & HR" },
   { type: "weight", label: "Weight" },
-  { type: "oxygen_saturation", label: "SpO2" },
+  { type: "glucose", label: "Glucose" },
 ];
 
 export const VitalsHistory = ({
@@ -121,8 +119,8 @@ export const VitalsHistory = ({
               {period === "week"
                 ? "Week"
                 : period === "month"
-                ? "Month"
-                : "Year"}
+                  ? "Month"
+                  : "Year"}
             </Text>
           </TouchableOpacity>
         ))}

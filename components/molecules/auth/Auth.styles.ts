@@ -14,6 +14,13 @@ export const authStyles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 40,
   },
+  logoContainer: {
+    alignItems: "center",
+    display: "flex",
+    flexDirection: "row",
+    gap: 6,
+    marginBottom: 16,
+  },
   appName: {
     fontSize: 32,
     fontWeight: "bold",
@@ -46,52 +53,13 @@ export const authStyles = StyleSheet.create({
     marginBottom: 24,
   },
   section: {
-    marginBottom: 16,
+    marginBottom: 24,
   },
   label: {
     fontSize: 14,
     fontWeight: "600",
     color: "#333",
     marginBottom: 8,
-  },
-  input: {
-    backgroundColor: "#f8f9fa",
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    color: "#333",
-  },
-  inputFocused: {
-    borderColor: "#1976d2",
-    backgroundColor: "#f0f7ff",
-  },
-  inputError: {
-    borderColor: "#f44336",
-  },
-  errorText: {
-    fontSize: 12,
-    color: "#f44336",
-    marginTop: 4,
-  },
-  passwordContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#f8f9fa",
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 8,
-    paddingHorizontal: 12,
-  },
-  passwordInput: {
-    flex: 1,
-    padding: 12,
-    fontSize: 16,
-    color: "#333",
-  },
-  passwordToggle: {
-    padding: 8,
   },
   button: {
     backgroundColor: "#1976d2",
@@ -150,5 +118,11 @@ export const authStyles = StyleSheet.create({
     color: "#999",
     paddingHorizontal: 12,
     fontSize: 12,
+  },
+  errorText: {
+    color: "#e53935",
+    fontSize: 14,
+    marginBottom: 12,
+    textAlign: "center",
   },
 });

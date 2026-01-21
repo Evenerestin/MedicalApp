@@ -24,11 +24,6 @@ export const Menu: React.FC<MenuProps> = ({
 
   const menuTabs = [
     {
-      key: "home",
-      icon: IconHomeFilled,
-      label: "Home",
-    },
-    {
       key: "vitals",
       icon: IconHeartbeat,
       label: "Vitals",
@@ -37,6 +32,11 @@ export const Menu: React.FC<MenuProps> = ({
       key: "medications",
       icon: IconPill,
       label: "Medications",
+    },
+    {
+      key: "home",
+      icon: IconHomeFilled,
+      label: "Home",
     },
     {
       key: "calendar",

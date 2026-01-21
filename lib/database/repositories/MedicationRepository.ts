@@ -1,19 +1,11 @@
-/**
- * Medication Repository
- * CRUD operations for medications
- */
-
 import { v4 as uuidv4 } from "uuid";
 import { Medication } from "../../../types";
 import { dbManager } from "../DatabaseManager";
 
 export class MedicationRepository {
-  /**
-   * Create new medication
-   */
   static async create(
     userId: string,
-    data: Omit<Medication, "id" | "createdAt" | "updatedAt">
+    data: Omit<Medication, "id" | "createdAt" | "updatedAt">,
   ): Promise<Medication> {
     const id = uuidv4();
     const now = new Date().toISOString();
@@ -31,14 +23,14 @@ export class MedicationRepository {
         data.name,
         data.dosage,
         data.frequency,
-        "", // route - not in type
-        "", // reason - not in type
+        "",
+        "",
         data.startDate || "",
         data.endDate || "",
         data.isActive ? 1 : 0,
         now,
         now,
-      ]
+      ],
     );
 
     return {
@@ -51,110 +43,126 @@ export class MedicationRepository {
     };
   }
 
-  /**
-   * Get medication by ID
-   */
-  static async getById(id: string): Promise<Medication | null> {
-    const medication = await dbManager.getOne<any>(
-      "SELECT * FROM medications WHERE id = ?",
-      [id]
-    );
-
-    return medication ? this.formatMedication(medication) : null;
-  }
-
-  /**
-   * Get all medications for user
-   */
   static async getByUserId(userId: string): Promise<Medication[]> {
-    const medications = await dbManager.getAll<any>(
+    const results = await dbManager.getAll(
       "SELECT * FROM medications WHERE userId = ? ORDER BY createdAt DESC",
-      [userId]
+      [userId],
     );
-
-    return medications.map((m: any) => this.formatMedication(m));
+    return results.map((row: any) => ({
+      id: row.id,
+      userId: row.userId,
+      name: row.name,
+      dosage: row.dosage,
+      unit: "mg" as const,
+      frequency: row.frequency,
+      startDate: row.startDate,
+      endDate: row.endDate,
+      isActive: row.active === 1,
+      times: [],
+      remindersEnabled: false,
+      notes: row.notes || "",
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+    }));
   }
 
-  /**
-   * Get active medications for user
-   */
   static async getActiveMedications(userId: string): Promise<Medication[]> {
-    const medications = await dbManager.getAll<any>(
-      "SELECT * FROM medications WHERE userId = ? AND active = 1 ORDER BY name ASC",
-      [userId]
+    const results = await dbManager.getAll(
+      "SELECT * FROM medications WHERE userId = ? AND active = 1 ORDER BY createdAt DESC",
+      [userId],
     );
-
-    return medications.map((m: any) => this.formatMedication(m));
+    return results.map((row: any) => ({
+      id: row.id,
+      userId: row.userId,
+      name: row.name,
+      dosage: row.dosage,
+      unit: "mg" as const,
+      frequency: row.frequency,
+      startDate: row.startDate,
+      endDate: row.endDate,
+      isActive: row.active === 1,
+      times: [],
+      remindersEnabled: false,
+      notes: row.notes || "",
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+    }));
   }
 
-  /**
-   * Update medication
-   */
+  static async getById(id: string): Promise<Medication | null> {
+    const results = await dbManager.getAll(
+      "SELECT * FROM medications WHERE id = ?",
+      [id],
+    );
+    if (results.length === 0) return null;
+    const row = results[0];
+    return {
+      id: row.id,
+      userId: row.userId,
+      name: row.name,
+      dosage: row.dosage,
+      unit: "mg" as const,
+      frequency: row.frequency,
+      startDate: row.startDate,
+      endDate: row.endDate,
+      isActive: row.active === 1,
+      times: [],
+      remindersEnabled: false,
+      notes: row.notes || "",
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+    };
+  }
+
   static async update(
     id: string,
-    data: Partial<Omit<Medication, "id" | "userId" | "createdAt">>
+    data: Partial<Omit<Medication, "id" | "userId" | "createdAt">>,
   ): Promise<Medication> {
+    const now = new Date().toISOString();
     const updates: string[] = [];
-    const params: (string | number)[] = [];
+    const values: any[] = [];
 
     if (data.name !== undefined) {
       updates.push("name = ?");
-      params.push(data.name);
+      values.push(data.name);
     }
     if (data.dosage !== undefined) {
       updates.push("dosage = ?");
-      params.push(data.dosage);
+      values.push(data.dosage);
     }
     if (data.frequency !== undefined) {
       updates.push("frequency = ?");
-      params.push(data.frequency);
+      values.push(data.frequency);
     }
     if (data.startDate !== undefined) {
       updates.push("startDate = ?");
-      params.push(data.startDate);
+      values.push(data.startDate);
     }
     if (data.endDate !== undefined) {
       updates.push("endDate = ?");
-      params.push(data.endDate);
+      values.push(data.endDate);
     }
     if (data.isActive !== undefined) {
       updates.push("active = ?");
-      params.push(data.isActive ? 1 : 0);
+      values.push(data.isActive ? 1 : 0);
     }
 
     updates.push("updatedAt = ?");
-    params.push(new Date().toISOString());
-
-    params.push(id);
+    values.push(now);
+    values.push(id);
 
     await dbManager.update(
       `UPDATE medications SET ${updates.join(", ")} WHERE id = ?`,
-      params
+      values,
     );
 
     const updated = await this.getById(id);
-    if (!updated) throw new Error("Medication not found");
+    if (!updated) throw new Error("Medication not found after update");
     return updated;
   }
 
-  /**
-   * Delete medication
-   */
   static async delete(id: string): Promise<boolean> {
-    const changes = await dbManager.delete(
-      "DELETE FROM medications WHERE id = ?",
-      [id]
-    );
-    return changes > 0;
-  }
-
-  /**
-   * Format medication from database
-   */
-  private static formatMedication(medication: any): Medication {
-    return {
-      ...medication,
-      active: Boolean(medication.active),
-    };
+    await dbManager.delete("DELETE FROM medications WHERE id = ?", [id]);
+    return true;
   }
 }

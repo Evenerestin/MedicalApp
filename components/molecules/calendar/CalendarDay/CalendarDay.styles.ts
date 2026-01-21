@@ -12,15 +12,17 @@ export default StyleSheet.create({
     borderWidth: 2,
     borderColor: "transparent",
   },
-  selected: {
-    backgroundColor: "#e3f2fd",
+  // Variant: outline (today)
+  outline: {
     borderColor: "#1976d2",
+    backgroundColor: "transparent",
   },
-  today: {
-    borderColor: "#1976d2",
-  },
-  todaySelected: {
+  filled: {
     backgroundColor: "#1976d2",
+    borderColor: "#1976d2",
+  },
+  light: {
+    backgroundColor: "#e3f2fd",
     borderColor: "#1976d2",
   },
   outside: {
@@ -31,16 +33,19 @@ export default StyleSheet.create({
     color: "#333333",
     fontWeight: "500",
   },
-  textSelected: {
+  textOutline: {
     color: "#1976d2",
     fontWeight: "bold",
+    fontSize: 16,
   },
-  textToday: {
-    color: "#1976d2",
-    fontWeight: "bold",
-  },
-  textTodaySelected: {
+  textFilled: {
     color: "#fff",
     fontWeight: "bold",
+    fontSize: 16,
+  },
+  textLight: {
+    color: "#1976d2",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });

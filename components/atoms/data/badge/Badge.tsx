@@ -1,6 +1,10 @@
 import { IconProps as TablerIconProps } from "@tabler/icons-react-native";
+import colors from "@theme/colors";
+import type { VariantType } from "@theme/variants";
+import getVariantConfig from "@theme/variants";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
+import { styles } from "./Badge.styles";
 
 export type BadgeProps = {
   children: React.ReactNode;
@@ -10,90 +14,59 @@ export type BadgeProps = {
   style?: any;
   leftSection?: React.ReactNode;
   rightSection?: React.ReactNode;
-  variant?: "filled" | "default";
-};
-
-const sizeMap = {
-  sm: { height: 20, paddingHorizontal: 8, fontSize: 12 },
-  md: { height: 26, paddingHorizontal: 12, fontSize: 14 },
-  lg: { height: 32, paddingHorizontal: 16, fontSize: 16 },
-};
-
-const getLightColor = (color: string): string => {
-  if (color.startsWith("#")) {
-    const hex = color.replace("#", "");
-    const r = parseInt(hex.substring(0, 2), 16);
-    const g = parseInt(hex.substring(2, 4), 16);
-    const b = parseInt(hex.substring(4, 6), 16);
-    return `rgba(${r}, ${g}, ${b}, 0.1)`;
-  }
-  return color;
+  variant?: VariantType;
 };
 
 export const Badge: React.FC<BadgeProps> = ({
   children,
-  color = "#1976d2",
-  backgroundColor,
+  color,
   size = "md",
   style,
   leftSection,
   rightSection,
-  variant = "default",
+  variant = "filled",
 }) => {
-  const sizeStyle = sizeMap[size] || sizeMap.md;
-  const isFilled = variant === "filled";
+  const accent = color || colors.primary;
+  const variantStyles = getVariantConfig(variant as VariantType, accent);
 
-  const bg = isFilled
-    ? backgroundColor || color
-    : backgroundColor || getLightColor(color);
-  const textColor = isFilled ? "#fff" : color;
-  const getIconColor = () => textColor;
-  const getIconSize = () => {
-    switch (size) {
-      case "sm":
-        return 16;
-      case "md":
-        return 20;
-      case "lg":
-        return 24;
-      default:
-        return 20;
-    }
-  };
   const renderIcon = (icon: React.ReactNode) => {
     if (!icon) return null;
+    const iconSize = size === "sm" ? 16 : size === "md" ? 24 : 32;
     if (React.isValidElement<TablerIconProps>(icon)) {
       const existingProps = icon.props || {};
       const shouldApplyColor = !existingProps.color;
       const shouldApplySize = !existingProps.size;
       if (shouldApplyColor || shouldApplySize) {
         const newProps: Partial<TablerIconProps> = { ...existingProps };
-        if (shouldApplyColor) newProps.color = getIconColor();
-        if (shouldApplySize) newProps.size = getIconSize();
+        if (shouldApplyColor) newProps.color = variantStyles.icon;
+        if (shouldApplySize) newProps.size = iconSize;
         return React.cloneElement(icon, newProps);
       }
     }
     return icon;
   };
+
   return (
     <View
       style={[
-        badgeStyles.base,
+        styles.base,
+        styles[size],
         {
-          backgroundColor: bg,
-          height: sizeStyle.height,
-          paddingHorizontal: sizeStyle.paddingHorizontal,
+          backgroundColor: variantStyles.background,
+          borderColor: variantStyles.border,
         },
         style,
       ]}
     >
       {leftSection && (
-        <View style={{ marginRight: 6 }}>{renderIcon(leftSection)}</View>
+        <View style={styles.leftSection}>{renderIcon(leftSection)}</View>
       )}
       <Text
         style={[
-          badgeStyles.text,
-          { color: textColor, fontSize: sizeStyle.fontSize },
+          styles.text,
+          {
+            color: variantStyles.text,
+          },
         ]}
         numberOfLines={1}
         ellipsizeMode="tail"
@@ -101,24 +74,8 @@ export const Badge: React.FC<BadgeProps> = ({
         {children}
       </Text>
       {rightSection && (
-        <View style={{ marginLeft: 6 }}>{renderIcon(rightSection)}</View>
+        <View style={styles.rightSection}>{renderIcon(rightSection)}</View>
       )}
     </View>
   );
 };
-
-const badgeStyles = StyleSheet.create({
-  base: {
-    borderRadius: 999,
-    alignSelf: "flex-start",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-    minWidth: 20,
-    minHeight: 20,
-  },
-  text: {
-    fontWeight: "600",
-    textAlign: "center",
-  },
-});

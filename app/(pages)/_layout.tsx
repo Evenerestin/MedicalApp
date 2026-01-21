@@ -1,72 +1,35 @@
-import { Ionicons } from "@expo/vector-icons";
-import { Tabs } from "expo-router";
+import { Slot, useRouter } from "expo-router";
+import { View } from "react-native";
+import { Menu } from "../../components/organisms/navigation/Menu";
 
 export default function PagesLayout() {
+  const router = useRouter();
+  // Map Menu tab keys to routes
+  const handleTabPress = (key: string) => {
+    switch (key) {
+      case "home":
+        router.push("/(pages)");
+        break;
+      case "calendar":
+        router.push("/(pages)/calendar");
+        break;
+      case "medications":
+        router.push("/(pages)/medications");
+        break;
+      case "vitals":
+        router.push("/(pages)/health/vitals");
+        break;
+      case "profile":
+        router.push("/(pages)/profile");
+        break;
+      default:
+        break;
+    }
+  };
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarActiveTintColor: "#152b4f",
-        tabBarInactiveTintColor: "#999999",
-        tabBarStyle: {
-          backgroundColor: "#ffffff",
-          borderTopWidth: 1,
-          borderTopColor: "#e0e0e0",
-          paddingBottom: 8,
-          paddingTop: 8,
-          height: 64,
-        },
-        tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: "500",
-        },
-      }}
-    >
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: "Home",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="calendar"
-        options={{
-          title: "Calendar",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="calendar" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="medications"
-        options={{
-          title: "Medications",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="medical" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="health"
-        options={{
-          title: "Health",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="heart" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{
-          title: "Profile",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" size={size} color={color} />
-          ),
-        }}
-      />
-    </Tabs>
+    <View style={{ flex: 1 }}>
+      <Slot />
+      <Menu onTabPress={handleTabPress} />
+    </View>
   );
 }

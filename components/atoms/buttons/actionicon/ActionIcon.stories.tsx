@@ -1,16 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { IconBell } from "@tabler/icons-react-native";
 import React from "react";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 import { ActionIcon } from "./ActionIcon";
 
 const meta: Meta<typeof ActionIcon> = {
-  title: "Atoms/Buttons/ActionIcon/Base",
+  title: "Atoms/Buttons/ActionIcon",
   component: ActionIcon,
   parameters: { docs: { autodocs: true } },
   argTypes: {
     icon: {
       control: false,
+      table: { disable: true },
     },
   },
 };
@@ -26,21 +27,24 @@ export const Base: StoryObj<typeof ActionIcon> = {
   ),
 };
 
-export const Loading: StoryObj<typeof ActionIcon> = {
+export const Rounded: StoryObj<typeof ActionIcon> = {
   args: {
     size: "md",
     variant: "filled",
-    disabled: true,
-    loading: true,
+    rounded: true,
   },
+  render: (args) => (
+    <ActionIcon {...args} icon={<IconBell size={24} color="#fff" />} />
+  ),
 };
 
-export const LoadingRounded: StoryObj<typeof ActionIcon> = {
+export const Disabled: StoryObj<typeof ActionIcon> = {
   args: {
     size: "md",
     variant: "filled",
     disabled: true,
-    loading: true,
-    style: { borderRadius: 50 },
   },
+  render: (args) => (
+    <ActionIcon {...args} icon={<IconBell size={24} color="#fff" />} />
+  ),
 };

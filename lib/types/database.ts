@@ -49,6 +49,8 @@ export interface VitalMeasurement {
   userId: string;
   type: string;
   value: number;
+  secondaryValue?: number;
+  tertiaryValue?: number;
   unit?: string;
   notes?: string;
   timestamp: string;
