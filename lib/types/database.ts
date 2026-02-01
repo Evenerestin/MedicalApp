@@ -1,19 +1,13 @@
 /**
  * Database Type Definitions
- * Extends main types with database-specific fields
+ * Types that map directly to database tables
  */
 
-export interface Medication {
+export interface User {
   id: string;
-  userId: string;
-  name: string;
-  dosage: string;
-  frequency: string;
-  route?: string;
-  reason?: string;
-  startDate?: string;
-  endDate?: string;
-  active: boolean;
+  email: string;
+  name?: string;
+  birthDate?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -32,41 +26,36 @@ export interface Appointment {
   updatedAt: string;
 }
 
-export interface GlucoseMeasurement {
+export interface Medication {
   id: string;
   userId: string;
-  value: number;
+  name: string;
+  dosage: string;
   unit: string;
-  mealTime?: string;
-  insulinDose?: number;
+  frequency: string;
+  times?: string[];
+  remindersEnabled: boolean;
   notes?: string;
-  timestamp: string;
+  isActive: boolean;
+  startDate?: string;
+  endDate?: string;
   createdAt: string;
+  updatedAt: string;
 }
 
 export interface VitalMeasurement {
   id: string;
   userId: string;
-  type: string;
+  type: "blood_pressure" | "weight" | "glucose";
   value: number;
   secondaryValue?: number;
   tertiaryValue?: number;
   unit?: string;
+  tag?: string;
+  insulinDose?: number;
   notes?: string;
-  timestamp: string;
+  measuredAt: string;
   createdAt: string;
-}
-
-export interface Allergy {
-  id: string;
-  userId: string;
-  allergen: string;
-  category: string;
-  severity: string;
-  symptoms?: string;
-  notes?: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface MenstrualCycle {
@@ -82,14 +71,36 @@ export interface MenstrualCycle {
   updatedAt: string;
 }
 
+export interface Allergy {
+  id: string;
+  userId: string;
+  name: string;
+  category: "food" | "medication" | "environmental" | "chemical";
+  severity: "mild" | "moderate" | "severe";
+  symptoms?: string;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AllergyLog {
+  id: string;
+  userId: string;
+  allergyId: string;
+  date: string;
+  intensity?: number;
+  symptoms?: string;
+  treatment?: string;
+  notes?: string;
+  createdAt: string;
+}
+
 export interface ICEProfile {
   id: string;
   userId: string;
   bloodType?: string;
   organDonor?: boolean;
   medicalConditions?: string;
-  currentMedications?: string;
-  allergies?: string;
   emergencyContact1Name?: string;
   emergencyContact1Phone?: string;
   emergencyContact1Relation?: string;
@@ -100,13 +111,13 @@ export interface ICEProfile {
   updatedAt: string;
 }
 
-export interface User {
+export interface AppNotification {
   id: string;
-  email: string;
-  firstName?: string;
-  lastName?: string;
-  birthDate?: string;
-  bloodType?: string;
+  userId: string;
+  title: string;
+  message?: string;
+  type?: string;
+  relatedId?: string;
+  isRead: boolean;
   createdAt: string;
-  updatedAt: string;
 }

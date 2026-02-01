@@ -13,14 +13,12 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 50,
     paddingBottom: 16,
-    // backgroundColor: "#152b4f",
   },
   headerLeft: {
     flex: 1,
   },
   greeting: {
     fontSize: 14,
-    // color: "rgba(255,255,255,0.7)",
   },
   userName: {
     fontSize: 22,

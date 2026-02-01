@@ -1,8 +1,7 @@
 export interface User {
   id: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   dateOfBirth?: string;
   phone?: string;
   createdAt: string;
@@ -15,8 +14,7 @@ export interface UserCredentials {
 }
 
 export interface UserRegistration extends UserCredentials {
-  firstName: string;
-  lastName: string;
+  name: string;
 }
 
 export interface Appointment {

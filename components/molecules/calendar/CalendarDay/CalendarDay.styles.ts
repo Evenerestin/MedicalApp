@@ -1,3 +1,4 @@
+import colors from "@theme/colors";
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
@@ -9,21 +10,20 @@ export default StyleSheet.create({
     justifyContent: "center",
     margin: 2,
     backgroundColor: "transparent",
-    borderWidth: 2,
+    borderWidth: 0,
     borderColor: "transparent",
   },
-  // Variant: outline (today)
   outline: {
-    borderColor: "#1976d2",
+    borderColor: "transparent",
     backgroundColor: "transparent",
   },
   filled: {
-    backgroundColor: "#1976d2",
-    borderColor: "#1976d2",
+    backgroundColor: colors.primary,
+    borderColor: "transparent",
   },
   light: {
-    backgroundColor: "#e3f2fd",
-    borderColor: "#1976d2",
+    backgroundColor: "rgba(25, 118, 210, 0.15)", // semi-transparent blue
+    borderColor: "transparent",
   },
   outside: {
     opacity: 0.4,

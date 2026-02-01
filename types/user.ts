@@ -1,14 +1,12 @@
 export interface User {
   id: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   dateOfBirth?: string;
   phone?: string;
   createdAt: string;
   updatedAt: string;
-  //   token???
-  credentials: {
+  credentials?: {
     email: string;
     password: string;
   };

@@ -1,9 +1,17 @@
 import { Ionicons } from "@expo/vector-icons";
+import colors from "@theme/colors";
 import React, { useState } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
-import { ChartPeriod, VitalMeasurement, VitalType } from "../../../types";
+import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  ChartDataPoint,
+  ChartPeriod,
+  VitalMeasurement,
+  VitalType,
+} from "../../../types";
 import { VitalMeasurementCard } from "./VitalMeasurementCard";
 import { styles } from "./Vitals.styles";
+import { VitalsChart } from "./VitalsChart";
 
 export interface VitalsHistoryProps {
   measurements: VitalMeasurement[];
@@ -26,7 +34,6 @@ export const VitalsHistory = ({
   onBack,
 }: VitalsHistoryProps) => {
   const [selectedType, setSelectedType] = useState<VitalType | "all">("all");
-  const [selectedPeriod, setSelectedPeriod] = useState<ChartPeriod>("week");
 
   const filteredMeasurements =
     selectedType === "all"
@@ -72,7 +79,7 @@ export const VitalsHistory = ({
       <View style={styles.header}>
         {onBack && (
           <TouchableOpacity style={styles.backButton} onPress={onBack}>
-            <Ionicons name="arrow-back" size={24} color="#152b4f" />
+            <Ionicons name="arrow-back" size={24} color={colors.primary} />
           </TouchableOpacity>
         )}
         <Text style={styles.headerTitle}>Vital Parameters</Text>
@@ -100,43 +107,7 @@ export const VitalsHistory = ({
         ))}
       </View>
 
-      <View style={styles.periodSelector}>
-        {(["week", "month", "year"] as ChartPeriod[]).map((period) => (
-          <TouchableOpacity
-            key={period}
-            style={[
-              styles.periodButton,
-              selectedPeriod === period && styles.periodButtonActive,
-            ]}
-            onPress={() => setSelectedPeriod(period)}
-          >
-            <Text
-              style={[
-                styles.periodButtonText,
-                selectedPeriod === period && styles.periodButtonTextActive,
-              ]}
-            >
-              {period === "week"
-                ? "Week"
-                : period === "month"
-                  ? "Month"
-                  : "Year"}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      <View style={styles.chartContainer}>
-        <Text style={styles.chartTitle}>
-          {selectedType === "all"
-            ? "Overview"
-            : vitalTabs.find((t) => t.type === selectedType)?.label}
-        </Text>
-        <View style={styles.chartPlaceholder}>
-          <Ionicons name="bar-chart-outline" size={48} color="#cccccc" />
-          <Text style={styles.chartPlaceholderText}>Chart visualization</Text>
-        </View>
-      </View>
+      {/* Chart and period selector removed */}
 
       {filteredMeasurements.length === 0 ? (
         renderEmptyState()

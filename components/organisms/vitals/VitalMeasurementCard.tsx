@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { VitalMeasurement, VitalType } from "../../types";
+import { VitalMeasurement, VitalType } from "../../../types";
 import { styles } from "./Vitals.styles";
 
 export interface VitalMeasurementCardProps {
@@ -11,7 +11,7 @@ export interface VitalMeasurementCardProps {
 
 const vitalTypeConfig: Record<
   VitalType,
-  { label: string; icon: string; color: string }
+  { label: string; icon: keyof typeof Ionicons.glyphMap; color: string }
 > = {
   blood_pressure: { label: "BP & HR", icon: "heart", color: "#e53935" },
   weight: { label: "Weight", icon: "scale", color: "#43a047" },
@@ -78,11 +78,7 @@ export const VitalMeasurementCard = ({
               { backgroundColor: `${config.color}20` },
             ]}
           >
-            <Ionicons
-              name={config.icon as keyof typeof Ionicons.glyphMap}
-              size={20}
-              color={config.color}
-            />
+            <Ionicons name={config.icon} size={20} color={config.color} />
           </View>
           <View>
             <Text style={styles.measurementTypeLabel}>{config.label}</Text>

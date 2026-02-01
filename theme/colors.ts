@@ -1,6 +1,12 @@
 const colors = {
   primary: "#007AFF",
   secondary: "#34C759",
+
+  blue: "#1976d2",
+  green: "#34C759",
+  red: "#e53935",
+  pink: "#ec407a",
+
   white: "#FFFFFF",
   light: "#8E8E93",
   background: "#f8f9fa",

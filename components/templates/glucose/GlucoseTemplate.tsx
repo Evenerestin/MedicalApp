@@ -1,41 +1,17 @@
 import { IconPlus } from "@tabler/icons-react-native";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { GlucoseMeasurement } from "../../../types";
+import { useGlucoseMeasurements } from "../../../context/AppContext";
 import { GlucoseHistory } from "../../organisms/glucose/GlucoseHistory";
-
-const mockGlucose: GlucoseMeasurement[] = [
-  {
-    id: "1",
-    userId: "user1",
-    value: 120,
-    unit: "mg/dL",
-    tag: "fasting",
-    measuredAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: "2",
-    userId: "user1",
-    value: 180,
-    unit: "mg/dL",
-    tag: "after_meal",
-    insulinDose: 10,
-    insulinType: "rapid",
-    measuredAt: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
-    createdAt: new Date().toISOString(),
-  },
-];
 
 export default function GlucoseScreen() {
   const router = useRouter();
-  const [measurements, setMeasurements] =
-    useState<GlucoseMeasurement[]>(mockGlucose);
+  const measurements = useGlucoseMeasurements();
 
   const handleAddNew = () => {
-    router.push("/health/glucose");
+    router.push("/health/glucose/new" as any);
   };
 
   return (

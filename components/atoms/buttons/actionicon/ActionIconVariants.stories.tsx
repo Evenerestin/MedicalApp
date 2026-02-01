@@ -19,24 +19,24 @@ export default meta;
 
 export const Filled: StoryObj<typeof ActionIcon> = {
   render: (args) => (
-    <ActionIcon size={args.size} variant="filled" icon={<IconBell />} />
+    <ActionIcon {...args} variant="filled" icon={<IconBell />} />
   ),
 };
 
 export const Light: StoryObj<typeof ActionIcon> = {
   render: (args) => (
-    <ActionIcon size={args.size} variant="light" icon={<IconBell />} />
+    <ActionIcon {...args} variant="light" icon={<IconBell />} />
   ),
 };
 
 export const Outline: StoryObj<typeof ActionIcon> = {
   render: (args) => (
-    <ActionIcon size={args.size} variant="outline" icon={<IconBell />} />
+    <ActionIcon {...args} variant="outline" icon={<IconBell />} />
   ),
 };
 
 export const Transparent: StoryObj<typeof ActionIcon> = {
   render: (args) => (
-    <ActionIcon size={args.size} variant="transparent" icon={<IconBell />} />
+    <ActionIcon {...args} variant="transparent" icon={<IconBell />} />
   ),
 };

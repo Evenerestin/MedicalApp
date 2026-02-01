@@ -2,6 +2,7 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { useAppDispatch, useUser } from "../../../context/AppContext";
+import { DatabaseService } from "../../../lib/database";
 import { User } from "../../../types";
 
 export default function EditProfilePage() {
@@ -17,14 +18,19 @@ export default function EditProfilePage() {
     );
   }
 
-  const handleSave = (data: Partial<User>) => {
-    const updatedUser: User = {
-      ...user,
-      ...data,
-      updatedAt: new Date().toISOString(),
-    };
-    dispatch({ type: "SET_USER", payload: updatedUser });
-    router.back();
+  const handleSave = async (data: Partial<User>) => {
+    try {
+      const updatedUser = await DatabaseService.updateUserProfile(
+        user.id,
+        data,
+      );
+      if (updatedUser) {
+        dispatch({ type: "SET_USER", payload: updatedUser });
+      }
+      router.back();
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+    }
   };
 
   const handleBack = () => {
@@ -36,15 +42,7 @@ export default function EditProfilePage() {
     router.replace("/(pages)" as any);
   };
 
-  return (
-    <></>
-    // <ProfileEdit
-    //   user={user}
-    //   onSave={handleSave}
-    //   onBack={handleBack}
-    //   onLogout={handleLogout}
-    // />
-  );
+  return <></>;
 }
 
 const styles = StyleSheet.create({

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Button } from "../../../atoms/buttons/button/Button";
 import { AppointmentItem } from "../../../molecules/appointments/item/AppointmentItem";
 import { appointmentsListStyles } from "./AppointmentsList.styles";
 
@@ -63,61 +64,39 @@ export const AppointmentsList: React.FC<AppointmentsListProps> = ({
 
   if (appointments.length === 0) {
     return (
-      <View style={appointmentsListStyles.emptyContainer}>
+      <View
+        style={[appointmentsListStyles.emptyContainer, { paddingVertical: 48 }]}
+      >
         <Text style={appointmentsListStyles.emptyText}>
           No Appointments Yet
         </Text>
         <Text style={appointmentsListStyles.emptySubtext}>
           Schedule your first appointment to get started
         </Text>
-        {onAddNew && (
-          <TouchableOpacity
-            style={appointmentsListStyles.emptyButton}
-            onPress={onAddNew}
-          >
-            <Text style={appointmentsListStyles.emptyButtonText}>
-              Add Appointment
-            </Text>
-          </TouchableOpacity>
-        )}
       </View>
     );
   }
+
+  const allAppointments = [...appointments].sort((a, b) => {
+    const dateCompare = new Date(a.date).getTime() - new Date(b.date).getTime();
+    if (dateCompare !== 0) return dateCompare;
+    return a.time.localeCompare(b.time);
+  });
 
   return (
     <ScrollView
       style={appointmentsListStyles.container}
       contentContainerStyle={appointmentsListStyles.scrollView}
     >
-      {groupedAppointments.upcoming.length > 0 && (
-        <>
-          <Text style={appointmentsListStyles.sectionTitle}>UPCOMING</Text>
-          {groupedAppointments.upcoming.map((apt) => (
-            <AppointmentItem
-              key={apt.id}
-              title={apt.title}
-              description={apt.description || apt.doctorName}
-              time={apt.time}
-              onPress={() => onAppointmentPress?.(apt.id)}
-            />
-          ))}
-        </>
-      )}
-
-      {groupedAppointments.past.length > 0 && (
-        <>
-          <Text style={appointmentsListStyles.sectionTitle}>PAST</Text>
-          {groupedAppointments.past.map((apt) => (
-            <AppointmentItem
-              key={apt.id}
-              title={apt.title}
-              description={apt.description || apt.doctorName}
-              time={apt.time}
-              onPress={() => onAppointmentPress?.(apt.id)}
-            />
-          ))}
-        </>
-      )}
+      {allAppointments.map((apt) => (
+        <AppointmentItem
+          key={apt.id}
+          title={apt.title}
+          description={apt.description || apt.doctorName}
+          time={apt.time}
+          onPress={() => onAppointmentPress?.(apt.id)}
+        />
+      ))}
     </ScrollView>
   );
 };

@@ -17,8 +17,7 @@ export const authStyles = StyleSheet.create({
   logoContainer: {
     alignItems: "center",
     display: "flex",
-    flexDirection: "row",
-    gap: 6,
+    flexDirection: "column",
     marginBottom: 16,
   },
   appName: {

@@ -10,7 +10,6 @@ import type { VariantType } from "@theme/variants";
 import getVariantConfig from "@theme/variants";
 import React from "react";
 import {
-  ActivityIndicator,
   TouchableOpacity,
   View,
   ViewStyle,

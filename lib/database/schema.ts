@@ -3,10 +3,9 @@ export const SCHEMA = {
     CREATE TABLE IF NOT EXISTS users (
       id TEXT PRIMARY KEY,
       email TEXT UNIQUE NOT NULL,
-      firstName TEXT,
-      lastName TEXT,
+      passwordHash TEXT NOT NULL,
+      name TEXT,
       birthDate TEXT,
-      bloodType TEXT,
       createdAt TEXT DEFAULT CURRENT_TIMESTAMP,
       updatedAt TEXT DEFAULT CURRENT_TIMESTAMP
     )
@@ -35,29 +34,16 @@ export const SCHEMA = {
       userId TEXT NOT NULL,
       name TEXT NOT NULL,
       dosage TEXT NOT NULL,
+      unit TEXT DEFAULT 'tablets',
       frequency TEXT NOT NULL,
-      route TEXT,
-      reason TEXT,
+      times TEXT,
+      remindersEnabled INTEGER DEFAULT 1,
+      notes TEXT,
+      isActive INTEGER DEFAULT 1,
       startDate TEXT,
       endDate TEXT,
-      active INTEGER DEFAULT 1,
       createdAt TEXT DEFAULT CURRENT_TIMESTAMP,
       updatedAt TEXT DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
-    )
-  `,
-
-  glucoseMeasurements: `
-    CREATE TABLE IF NOT EXISTS glucose_measurements (
-      id TEXT PRIMARY KEY,
-      userId TEXT NOT NULL,
-      value REAL NOT NULL,
-      unit TEXT NOT NULL,
-      mealTime TEXT,
-      insulinDose REAL,
-      notes TEXT,
-      timestamp TEXT NOT NULL,
-      createdAt TEXT DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
     )
   `,
@@ -71,8 +57,10 @@ export const SCHEMA = {
       secondaryValue REAL,
       tertiaryValue REAL,
       unit TEXT,
+      tag TEXT,
+      insulinDose REAL,
       notes TEXT,
-      timestamp TEXT NOT NULL,
+      measuredAt TEXT NOT NULL,
       createdAt TEXT DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
     )
@@ -98,7 +86,7 @@ export const SCHEMA = {
     CREATE TABLE IF NOT EXISTS allergies (
       id TEXT PRIMARY KEY,
       userId TEXT NOT NULL,
-      allergen TEXT NOT NULL,
+      name TEXT NOT NULL,
       category TEXT NOT NULL,
       severity TEXT NOT NULL,
       symptoms TEXT,
@@ -116,8 +104,6 @@ export const SCHEMA = {
       bloodType TEXT,
       organDonor INTEGER DEFAULT 0,
       medicalConditions TEXT,
-      currentMedications TEXT,
-      allergies TEXT,
       emergencyContact1Name TEXT,
       emergencyContact1Phone TEXT,
       emergencyContact1Relation TEXT,
@@ -130,19 +116,6 @@ export const SCHEMA = {
     )
   `,
 
-  environmentalAllergies: `
-    CREATE TABLE IF NOT EXISTS environmental_allergies (
-      id TEXT PRIMARY KEY,
-      userId TEXT NOT NULL,
-      allergen TEXT NOT NULL,
-      intensity INTEGER,
-      symptoms TEXT,
-      date TEXT NOT NULL,
-      createdAt TEXT DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
-    )
-  `,
-
   appNotifications: `
     CREATE TABLE IF NOT EXISTS app_notifications (
       id TEXT PRIMARY KEY,
@@ -151,8 +124,7 @@ export const SCHEMA = {
       message TEXT,
       type TEXT,
       relatedId TEXT,
-      read INTEGER DEFAULT 0,
-      timestamp TEXT DEFAULT CURRENT_TIMESTAMP,
+      isRead INTEGER DEFAULT 0,
       createdAt TEXT DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
     )
@@ -163,17 +135,16 @@ export const INDICES = [
   "CREATE INDEX IF NOT EXISTS idx_appointments_userId ON appointments(userId)",
   "CREATE INDEX IF NOT EXISTS idx_appointments_date ON appointments(date)",
   "CREATE INDEX IF NOT EXISTS idx_medications_userId ON medications(userId)",
-  "CREATE INDEX IF NOT EXISTS idx_medications_active ON medications(active)",
-  "CREATE INDEX IF NOT EXISTS idx_glucose_userId ON glucose_measurements(userId)",
-  "CREATE INDEX IF NOT EXISTS idx_glucose_timestamp ON glucose_measurements(timestamp)",
+  "CREATE INDEX IF NOT EXISTS idx_medications_active ON medications(isActive)",
   "CREATE INDEX IF NOT EXISTS idx_vitals_userId ON vital_measurements(userId)",
-  "CREATE INDEX IF NOT EXISTS idx_vitals_timestamp ON vital_measurements(timestamp)",
+  "CREATE INDEX IF NOT EXISTS idx_vitals_type ON vital_measurements(type)",
+  "CREATE INDEX IF NOT EXISTS idx_vitals_measuredAt ON vital_measurements(measuredAt)",
   "CREATE INDEX IF NOT EXISTS idx_menstrual_userId ON menstrual_cycles(userId)",
   "CREATE INDEX IF NOT EXISTS idx_allergies_userId ON allergies(userId)",
+
   "CREATE INDEX IF NOT EXISTS idx_ice_userId ON ice_profile(userId)",
-  "CREATE INDEX IF NOT EXISTS idx_env_allergies_userId ON environmental_allergies(userId)",
   "CREATE INDEX IF NOT EXISTS idx_notifications_userId ON app_notifications(userId)",
-  "CREATE INDEX IF NOT EXISTS idx_notifications_read ON app_notifications(read)",
+  "CREATE INDEX IF NOT EXISTS idx_notifications_read ON app_notifications(isRead)",
 ];
 
-export const DB_VERSION = 1;
+export const DB_VERSION = 4;

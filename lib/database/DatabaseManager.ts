@@ -14,27 +14,77 @@ export class DatabaseManager {
       return this.db;
     }
 
-    this.db = await SQLite.openDatabaseAsync(DB_NAME);
-    await this.runMigrations();
-    this.isInitialized = true;
-    return this.db;
+    try {
+      console.log("📦 Initializing database...");
+      this.db = await SQLite.openDatabaseAsync(DB_NAME);
+      console.log("✅ Database opened successfully");
+
+      await this.runMigrations();
+      console.log("✅ Migrations completed successfully");
+
+      this.isInitialized = true;
+      return this.db;
+    } catch (error) {
+      console.error("❌ Database initialization failed:", error);
+      throw new Error(`Failed to initialize database: ${error}`);
+    }
   }
 
   private async runMigrations(): Promise<void> {
-    const storedVersion = await AsyncStorage.getItem(DB_VERSION_KEY);
-    const currentVersion = DB_VERSION;
+    try {
+      const storedVersion = await AsyncStorage.getItem(DB_VERSION_KEY);
+      const currentVersion = DB_VERSION;
 
-    if (!storedVersion || parseInt(storedVersion) < currentVersion) {
-      const tableNames = Object.keys(SCHEMA) as Array<keyof typeof SCHEMA>;
-      for (const tableName of tableNames) {
-        await this.db!.execAsync(SCHEMA[tableName]);
+      console.log(
+        `📊 Stored DB version: ${storedVersion}, Current: ${currentVersion}`,
+      );
+
+      if (!storedVersion || parseInt(storedVersion) < currentVersion) {
+        console.log("🔄 Running migrations...");
+
+        if (storedVersion && parseInt(storedVersion) < 3) {
+          console.log("  Migrating to version 3: Recreating medications table");
+          await this.db!.execAsync("DROP TABLE IF EXISTS medications");
+        }
+
+        if (storedVersion && parseInt(storedVersion) < 4) {
+          console.log("  Migrating to version 4: Consolidating schema");
+
+          await this.db!.execAsync("DROP TABLE IF EXISTS glucose_measurements");
+          await this.db!.execAsync(
+            "DROP TABLE IF EXISTS environmental_allergies",
+          );
+
+          await this.db!.execAsync("DROP TABLE IF EXISTS vital_measurements");
+
+          await this.db!.execAsync("DROP TABLE IF EXISTS allergies");
+
+          await this.db!.execAsync("DROP TABLE IF EXISTS ice_profile");
+
+          await this.db!.execAsync("DROP TABLE IF EXISTS app_notifications");
+
+          await this.db!.execAsync("DROP TABLE IF EXISTS medications");
+        }
+
+        const tableNames = Object.keys(SCHEMA) as Array<keyof typeof SCHEMA>;
+
+        for (const tableName of tableNames) {
+          console.log(`  Creating/updating table: ${tableName}`);
+          await this.db!.execAsync(SCHEMA[tableName]);
+        }
+
+        for (const indexSql of INDICES) {
+          await this.db!.execAsync(indexSql);
+        }
+
+        await AsyncStorage.setItem(DB_VERSION_KEY, currentVersion.toString());
+        console.log("✅ Migrations completed");
+      } else {
+        console.log("✅ Database already up to date");
       }
-
-      for (const indexSql of INDICES) {
-        await this.db!.execAsync(indexSql);
-      }
-
-      await AsyncStorage.setItem(DB_VERSION_KEY, currentVersion.toString());
+    } catch (error) {
+      console.error("❌ Migration failed:", error);
+      throw error;
     }
   }
 
@@ -137,6 +187,37 @@ export class DatabaseManager {
     const tables = Object.keys(SCHEMA);
     for (const table of tables) {
       await this.db!.execAsync(`DELETE FROM ${table}`);
+    }
+  }
+
+  async close(): Promise<void> {
+    if (this.db) {
+      await this.db.closeAsync();
+      this.db = null;
+      this.isInitialized = false;
+      console.log("✅ Database closed");
+    }
+  }
+
+  async resetDatabase(): Promise<void> {
+    try {
+      console.log("🔄 Resetting database...");
+      await this.close();
+
+      try {
+        await SQLite.deleteDatabaseAsync(DB_NAME);
+      } catch (deleteError: any) {
+        if (!deleteError.message?.includes("not found")) {
+          throw deleteError;
+        }
+        console.log("ℹ️ Database file already deleted or not found");
+      }
+
+      await AsyncStorage.removeItem(DB_VERSION_KEY);
+      console.log("✅ Database reset complete");
+    } catch (error) {
+      console.error("❌ Database reset failed:", error);
+      throw error;
     }
   }
 }

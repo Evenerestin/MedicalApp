@@ -70,13 +70,11 @@ export const ComplexDatePicker: React.FC<ComplexDatePickerProps> = ({
     setYearModal(false);
     setStep(null);
     setModalVisible(false);
-    // Compose date and call onChange
     if (day && month !== undefined && y >= minYear && y <= maxYear) {
       onChange?.(new Date(y, month, day));
     }
   };
 
-  // Display value
   let display = "";
   if (day !== undefined && month !== undefined && year !== undefined) {
     display = `${String(day).padStart(2, "0")} ${MONTHS[month]} ${year}`;

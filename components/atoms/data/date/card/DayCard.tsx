@@ -9,28 +9,20 @@ export interface DayCardProps {
   style?: any;
 }
 
-const days = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
+const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const months = [
-  "January",
-  "February",
-  "March",
-  "April",
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
   "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
 ];
 
 export const DayCard: React.FC<DayCardProps> = ({
@@ -50,7 +42,7 @@ export const DayCard: React.FC<DayCardProps> = ({
     } else if (isToday) {
       style = { ...style, ...styles.card_outline };
     } else if (isSelected) {
-      style = { ...style, ...styles.card_light };
+      style = { ...style, ...styles.card_selected };
     }
     return style;
   }, [isToday, isSelected]);

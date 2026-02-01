@@ -4,32 +4,35 @@ import {
   Form,
   FormData,
 } from "../../../../components/organisms/appointments/form/AppointmentForm";
-import { useAppDispatch } from "../../../../context/AppContext";
-import { Appointment } from "../../../../types";
+import { useAppDispatch, useUser } from "../../../../context/AppContext";
+import { DatabaseService } from "../../../../lib/database";
 
 export default function NewAppointmentPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const user = useUser();
 
-  const handleSave = (data: FormData) => {
-    const newAppointment: Appointment = {
-      id: Date.now().toString(),
-      userId: "current-user",
-      title: data.title,
-      description: data.description,
-      date:
-        data.date?.toISOString().split("T")[0] ||
-        new Date().toISOString().split("T")[0],
-      time: data.time || "09:00",
-      address: data.address,
-      doctorName: data.doctor,
-      reminders: data.reminders ? ["day"] : [],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
+  const handleSave = async (data: FormData) => {
+    if (!user) return;
 
-    dispatch({ type: "ADD_APPOINTMENT", payload: newAppointment });
-    router.back();
+    try {
+      const newAppointment = await DatabaseService.addAppointment(user.id, {
+        title: data.title,
+        description: data.description,
+        date:
+          data.date?.toISOString().split("T")[0] ||
+          new Date().toISOString().split("T")[0],
+        time: data.time || "09:00",
+        address: data.address,
+        doctorName: data.doctor,
+        reminders: data.reminders ? ["day"] : [],
+      });
+
+      dispatch({ type: "ADD_APPOINTMENT", payload: newAppointment });
+      router.back();
+    } catch (error) {
+      console.error("Failed to save appointment:", error);
+    }
   };
 
   const handleCancel = () => {

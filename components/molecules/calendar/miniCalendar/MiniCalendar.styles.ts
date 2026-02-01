@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 export const miniCalendarStyles = StyleSheet.create({
   row: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     justifyContent: "center",
     gap: 4,
   },

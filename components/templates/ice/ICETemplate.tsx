@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ICEProfile } from "../../../types";
 import { ICEProfileView } from "../../organisms/ice/ICEProfileView";
@@ -44,16 +44,20 @@ export const ICETemplate: React.FC<ICETemplateProps> = ({
 }) => {
   return (
     <SafeAreaView style={styles.container}>
-      {profile ? (
-        <ICEProfileView profile={profile} onEdit={onEdit} onBack={onBack} />
-      ) : (
-        <View style={styles.emptyState}>
-          <Text style={styles.emptyText}>No ICE profile found</Text>
-          <Text style={styles.emptySubtext}>
-            Create your In Case of Emergency profile
-          </Text>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={styles.content}>
+          {profile ? (
+            <ICEProfileView profile={profile} onEdit={onEdit} onBack={onBack} />
+          ) : (
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyText}>No ICE profile found</Text>
+              <Text style={styles.emptySubtext}>
+                Create your In Case of Emergency profile
+              </Text>
+            </View>
+          )}
         </View>
-      )}
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -63,6 +67,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f8f9fa",
     paddingBottom: 96,
+  },
+  content: {
+    flex: 1,
+    padding: 16,
   },
   emptyState: {
     flex: 1,

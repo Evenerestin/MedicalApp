@@ -2,7 +2,6 @@ import {
   IconEye,
   IconEyeOff,
   IconLock,
-  IconMail,
   IconMedicalCross,
 } from "@tabler/icons-react-native";
 import React, { useState } from "react";
@@ -18,7 +17,6 @@ import { Input } from "../../atoms/inputs/input/Input";
 import { authStyles } from "./Auth.styles";
 
 export interface LoginFormData {
-  email: string;
   password: string;
 }
 
@@ -28,6 +26,7 @@ export interface LoginFormProps {
   onSwitchToRegister?: () => void;
   isLoading?: boolean;
   error?: string;
+  userName?: string;
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({
@@ -36,16 +35,16 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   onSwitchToRegister,
   isLoading = false,
   error,
+  userName,
 }) => {
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const isValid = email.trim() !== "" && password.trim() !== "";
+  const isValid = password.trim() !== "";
 
   const handleSubmit = () => {
     if (isValid && !isLoading) {
-      onSubmit?.({ email: email.trim(), password: password.trim() });
+      onSubmit?.({ password: password.trim() });
     }
   };
 
@@ -59,16 +58,20 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         keyboardShouldPersistTaps="handled"
       >
         <View style={authStyles.headerContainer}>
-          <View style={authStyles.logoContainer}>
+          <View style={[authStyles.logoContainer, { alignItems: "center" }]}>
             <IconMedicalCross size={60} color="#1976d2" />
-            <Text style={authStyles.appName}>App</Text>
+            <Text style={authStyles.appName}>{"Medical Tracker"}</Text>
           </View>
-          <Text style={authStyles.appTagline}>Desc</Text>
+          {/* Removed Desc text as requested */}
         </View>
 
         <View style={authStyles.formContainer}>
           <Text style={authStyles.title}>Welcome Back</Text>
-          <Text style={authStyles.subtitle}>Sign in to your account</Text>
+          {userName ? (
+            <Text style={authStyles.subtitle}>{userName}</Text>
+          ) : (
+            <Text style={authStyles.subtitle}>Sign in to your account</Text>
+          )}
 
           {error && (
             <View style={authStyles.section}>
@@ -77,16 +80,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           )}
 
           <View style={authStyles.section}>
-            <Input
-              label="Email Address"
-              value={email}
-              onChangeText={setEmail}
-              placeholder="Enter your email"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              disabled={isLoading}
-              leftSection={<IconMail size={20} color="#1976d2" />}
-            />
             <Input
               label="Password"
               value={password}

@@ -1,6 +1,40 @@
+import colors from "@theme/colors";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
+  footer: {
+    paddingHorizontal: 16,
+    paddingBottom: 24,
+    paddingTop: 8,
+    backgroundColor: "transparent",
+  },
+  footerButtons: {
+    flexDirection: "row",
+    gap: 12,
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  cancelButton: {
+    flex: 1,
+    marginRight: 8,
+  },
+  cancelButtonText: {
+    color: colors.primary,
+    fontWeight: "600",
+  },
+  cardContainer: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06,
+    shadowRadius: 3,
+    elevation: 1,
+    borderWidth: 1,
+    borderColor: "#e0e0e0",
+  },
   container: {
     flex: 1,
     backgroundColor: "#f8f9fa",
@@ -35,16 +69,25 @@ export const styles = StyleSheet.create({
   iceBanner: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#c62828",
-    margin: 16,
+    backgroundColor: "#fff",
+    marginHorizontal: 16,
+    marginTop: 16,
+    marginBottom: 8,
     padding: 16,
     borderRadius: 12,
+    borderLeftWidth: 4,
+    borderLeftColor: "#c62828",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 2,
   },
   iceBannerIcon: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: "rgba(255,255,255,0.2)",
+    backgroundColor: "#fff5f5",
     justifyContent: "center",
     alignItems: "center",
     marginRight: 12,
@@ -54,25 +97,25 @@ export const styles = StyleSheet.create({
   },
   iceBannerTitle: {
     fontSize: 18,
-    fontWeight: "bold",
-    color: "#ffffff",
+    fontWeight: "600",
+    color: "#152b4f",
   },
   iceBannerSubtitle: {
-    fontSize: 12,
-    color: "rgba(255,255,255,0.8)",
+    fontSize: 13,
+    color: "#666",
     marginTop: 2,
   },
 
   section: {
     backgroundColor: "#ffffff",
     marginHorizontal: 16,
-    marginBottom: 16,
+    marginBottom: 12,
     borderRadius: 12,
     padding: 16,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
-    shadowRadius: 4,
+    shadowRadius: 3,
     elevation: 2,
   },
   sectionHeader: {
@@ -81,10 +124,10 @@ export const styles = StyleSheet.create({
     marginBottom: 12,
   },
   sectionIcon: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: "#e8eef6",
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: "#f0f4f8",
     justifyContent: "center",
     alignItems: "center",
     marginRight: 12,
@@ -93,9 +136,11 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: "#152b4f",
+    flex: 1,
   },
   sectionContent: {
-    marginLeft: 44,
+    marginLeft: 48,
+    marginTop: 4,
   },
 
   infoRow: {
@@ -110,22 +155,22 @@ export const styles = StyleSheet.create({
   },
   infoLabel: {
     fontSize: 14,
-    color: "#666666",
+    color: "#666",
   },
   infoValue: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "500",
-    color: "#333333",
+    color: "#152b4f",
   },
   infoValueHighlight: {
     color: "#c62828",
-    fontWeight: "600",
+    fontWeight: "700",
   },
 
   listItem: {
     flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 8,
+    alignItems: "flex-start",
+    paddingVertical: 6,
   },
   listItemBullet: {
     width: 6,
@@ -133,23 +178,27 @@ export const styles = StyleSheet.create({
     borderRadius: 3,
     backgroundColor: "#152b4f",
     marginRight: 12,
+    marginTop: 6,
   },
   listItemText: {
     fontSize: 14,
-    color: "#333333",
+    color: "#333",
     flex: 1,
+    lineHeight: 20,
   },
 
   contactCard: {
     backgroundColor: "#f8f9fa",
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 8,
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: "#e0e0e0",
   },
   contactCardPrimary: {
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: "#c62828",
-    backgroundColor: "#fff5f5",
+    backgroundColor: "#fff",
   },
   contactHeader: {
     flexDirection: "row",
@@ -226,24 +275,20 @@ export const styles = StyleSheet.create({
     color: "#152b4f",
   },
   formScrollContent: {
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 16,
   },
   formSection: {
-    backgroundColor: "#ffffff",
     borderRadius: 12,
-    padding: 16,
+    paddingVertical: 12,
     marginBottom: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
   },
   formSectionTitle: {
     fontSize: 16,
     fontWeight: "600",
     color: "#152b4f",
-    marginBottom: 16,
+    marginBottom: 8,
   },
   inputContainer: {
     marginBottom: 16,
@@ -275,6 +320,7 @@ export const styles = StyleSheet.create({
   },
   row: {
     flexDirection: "row",
+    alignItems: "center",
     gap: 12,
   },
   halfInput: {
@@ -283,11 +329,39 @@ export const styles = StyleSheet.create({
 
   bloodTypeSelector: {
     flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 8,
+    gap: 2,
+    marginBottom: 0,
+  },
+  rhSegmentedControl: {
+    flexDirection: "row",
+    backgroundColor: "white",
+    borderRadius: 16,
+    padding: 4,
+    alignSelf: "center",
+    marginTop: 4,
+    marginBottom: 2,
+    boxShadow: "0px 1px 3px rgba(0,0,0,0.1)",
+  },
+  rhSegment: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    height: 24,
+    borderRadius: 16,
+  },
+  rhSegmentSelected: {
+    backgroundColor: colors.primary,
+  },
+  rhSegmentText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#666",
+  },
+  rhSegmentTextSelected: {
+    color: "#fff",
   },
   bloodTypeOption: {
-    width: 56,
+    flex: 1,
     height: 40,
     borderRadius: 8,
     backgroundColor: "#f0f4f8",
@@ -295,6 +369,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 1,
     borderColor: "#e0e0e0",
+    minWidth: 0,
   },
   bloodTypeOptionSelected: {
     backgroundColor: "#c62828",
@@ -345,10 +420,12 @@ export const styles = StyleSheet.create({
   },
 
   contactFormCard: {
-    backgroundColor: "#f8f9fa",
+    backgroundColor: "#fff",
     borderRadius: 8,
     padding: 12,
     marginBottom: 12,
+    borderLeftWidth: 4,
+    borderLeftColor: colors.primary,
   },
   contactFormHeader: {
     flexDirection: "row",

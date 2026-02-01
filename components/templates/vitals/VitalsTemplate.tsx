@@ -1,40 +1,17 @@
 import { IconPlus } from "@tabler/icons-react-native";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { VitalMeasurement } from "../../../types";
+import { useVitalMeasurements } from "../../../context/AppContext";
 import { VitalsHistory } from "../../organisms/vitals/VitalsHistory";
-
-// Mock data
-const mockVitals: VitalMeasurement[] = [
-  {
-    id: "1",
-    userId: "user1",
-    type: "heart_rate",
-    value: 72,
-    unit: "bpm",
-    measuredAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: "2",
-    userId: "user1",
-    type: "weight",
-    value: 75,
-    unit: "kg",
-    measuredAt: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
-    createdAt: new Date().toISOString(),
-  },
-];
 
 export default function VitalsScreen() {
   const router = useRouter();
-  const [measurements, setMeasurements] =
-    useState<VitalMeasurement[]>(mockVitals);
+  const measurements = useVitalMeasurements();
 
   const handleAddNew = () => {
-    router.push("/health/vitals");
+    router.push("/health/vitals/new" as any);
   };
 
   return (

@@ -1,48 +1,22 @@
+import { useRouter } from "expo-router";
 import React from "react";
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { Allergy } from "../../../types";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useAllergies } from "../../../context/AppContext";
 import { AllergiesList } from "../../organisms/allergies";
 
-export interface AllergiesTemplateProps {
-  allergies?: Allergy[];
-  onAllergyPress?: (id: string) => void;
-  onAddNew?: () => void;
-}
+export const AllergiesTemplate: React.FC = () => {
+  const allergies = useAllergies();
+  const router = useRouter();
 
-export const mockAllergies: Allergy[] = [
-  {
-    id: "1",
-    userId: "user1",
-    name: "Peanuts",
-    category: "food",
-    severity: "severe",
-    symptoms: ["difficulty breathing", "swelling"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "2",
-    userId: "user1",
-    name: "Penicillin",
-    category: "medication",
-    severity: "moderate",
-    symptoms: ["rash", "itching"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-];
+  const handleAllergyPress = (id: string) => {
+    router.push(`/health/allergies/${id}` as any);
+  };
 
-export const AllergiesTemplate: React.FC<AllergiesTemplateProps> = ({
-  allergies = mockAllergies,
-  onAllergyPress,
-  onAddNew,
-}) => {
+  const handleAddNew = () => {
+    router.push("/health/allergies/new" as any);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ height: 32 }} />
@@ -54,10 +28,10 @@ export const AllergiesTemplate: React.FC<AllergiesTemplateProps> = ({
       </View>
       <AllergiesList
         allergies={allergies}
-        onAllergyPress={onAllergyPress || (() => {})}
-        onAddNew={onAddNew || (() => {})}
+        onAllergyPress={handleAllergyPress}
+        onAddNew={handleAddNew}
       />
-      <TouchableOpacity style={styles.fab} onPress={onAddNew || (() => {})}>
+      <TouchableOpacity style={styles.fab} onPress={handleAddNew}>
         <Text style={styles.fabText}>+</Text>
       </TouchableOpacity>
     </SafeAreaView>

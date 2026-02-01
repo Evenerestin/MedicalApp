@@ -1,11 +1,18 @@
-import { IconCalendar, IconMapPin, IconUser } from "@tabler/icons-react-native";
+import {
+  IconCalendar,
+  IconMapPin,
+  IconTrash,
+  IconUser,
+} from "@tabler/icons-react-native";
+import colors from "@theme/colors";
 import React, { useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Modal, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Button } from "../../../atoms/buttons/button/Button";
-import { Checkbox } from "../../../atoms/inputs/checkbox/Checkbox";
 import { Input } from "../../../atoms/inputs/input/Input";
 import { DatePicker } from "../../../atoms/inputs/picker/date/DatePicker";
 import { TimePicker } from "../../../atoms/inputs/picker/time/TimePicker";
+import { Radio } from "../../../atoms/inputs/radio/Radio";
 import { Toggle } from "../../../atoms/inputs/toggle/Toggle";
 import { styles } from "./AppointmentForm.styles";
 
@@ -57,7 +64,7 @@ export const Form: React.FC<AppointmentFormProps> = ({
           weekBefore: initialData.reminders?.weekBefore ?? false,
           monthBefore: initialData.reminders?.monthBefore ?? false,
         }
-      : initialData.reminders ?? true
+      : (initialData.reminders ?? true),
   );
 
   const isValid = title.trim() !== "" && time.trim() !== "";
@@ -66,6 +73,21 @@ export const Form: React.FC<AppointmentFormProps> = ({
     typeof reminders === "boolean"
       ? reminders
       : reminders.dayBefore || reminders.weekBefore || reminders.monthBefore;
+
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  const handleDeletePress = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    setShowDeleteConfirm(false);
+    onDelete?.();
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteConfirm(false);
+  };
 
   const handleSave = () => {
     if (isValid && !isLoading) {
@@ -82,20 +104,93 @@ export const Form: React.FC<AppointmentFormProps> = ({
   };
 
   return (
-    <View style={styles.container}>
-      <ScrollView style={styles.scrollView}>
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={{ paddingBottom: 56 }}
+      >
         <View style={styles.section}>
           {mode === "edit" && onDelete && (
-            <Button
-              label="Delete Appointment"
-              variant="outline"
-              size="md"
-              onPress={onDelete}
-              disabled={isLoading}
-              style={styles.deleteButton}
-              textStyle={styles.deleteButtonText}
-              fullWidth
-            />
+            <>
+              <Button
+                label="Delete Appointment"
+                variant="light"
+                color={colors.red}
+                size="md"
+                onPress={handleDeletePress}
+                disabled={isLoading}
+                leftSection={<IconTrash size={20} color={colors.red} />}
+                fullWidth
+                style={{ marginBottom: 32 }}
+              />
+              <Modal
+                visible={showDeleteConfirm}
+                transparent
+                animationType="fade"
+                onRequestClose={handleDeleteCancel}
+              >
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "rgba(0,0,0,0.3)",
+                  }}
+                >
+                  <View
+                    style={{
+                      backgroundColor: "#fff",
+                      padding: 24,
+                      borderRadius: 12,
+                      width: 320,
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        fontWeight: "bold",
+                        marginBottom: 12,
+                      }}
+                    >
+                      Delete Appointment?
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        color: colors.textSecondary,
+                        marginBottom: 24,
+                        textAlign: "center",
+                      }}
+                    >
+                      Are you sure you want to delete this appointment? This
+                      action cannot be undone.
+                    </Text>
+                    <View style={{ flexDirection: "row", gap: 12 }}>
+                      <Button
+                        label="Cancel"
+                        variant="outline"
+                        size="md"
+                        fullWidth
+                        onPress={handleDeleteCancel}
+                        disabled={isLoading}
+                        style={{ flex: 1, marginRight: 8 }}
+                        textStyle={styles.cancelButtonText}
+                      />
+                      <Button
+                        label="Confirm"
+                        variant="light"
+                        size="md"
+                        fullWidth
+                        onPress={handleDeleteConfirm}
+                        disabled={isLoading}
+                        style={{ flex: 1 }}
+                      />
+                    </View>
+                  </View>
+                </View>
+              </Modal>
+            </>
           )}
           <Text style={styles.label}>Title *</Text>
           <Input
@@ -126,7 +221,7 @@ export const Form: React.FC<AppointmentFormProps> = ({
               setTime(
                 `${hour.toString().padStart(2, "0")}:${minute
                   .toString()
-                  .padStart(2, "0")}`
+                  .padStart(2, "0")}`,
               )
             }
             label="Select time"
@@ -168,7 +263,7 @@ export const Form: React.FC<AppointmentFormProps> = ({
                           dayBefore: false,
                           weekBefore: false,
                           monthBefore: false,
-                        }
+                        },
                   );
                 }
               }}
@@ -177,34 +272,35 @@ export const Form: React.FC<AppointmentFormProps> = ({
           </View>
           {remindersEnabled && (
             <View style={{ marginTop: 12 }}>
-              {(
-                [
-                  { key: "dayBefore", label: "1 day before" },
-                  { key: "weekBefore", label: "1 week before" },
-                  { key: "monthBefore", label: "1 month before" },
-                ] as const
-              ).map(({ key, label }) => (
+              {[
+                { key: "dayBefore" as const, label: "1 day before" },
+                { key: "weekBefore" as const, label: "1 week before" },
+                { key: "monthBefore" as const, label: "1 month before" },
+              ].map(({ key, label }) => (
                 <View
                   key={key}
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
-                    marginBottom: 8,
+                    marginBottom: 0,
                   }}
                 >
-                  <Checkbox
+                  <Radio
                     checked={
                       typeof reminders === "object" ? reminders[key] : false
                     }
-                    onChange={(checked) => {
-                      if (typeof reminders === "boolean") {
+                    onChange={() => {
+                      if (typeof reminders === "object") {
                         setReminders({
-                          dayBefore: key === "dayBefore" ? checked : false,
-                          weekBefore: key === "weekBefore" ? checked : false,
-                          monthBefore: key === "monthBefore" ? checked : false,
+                          ...reminders,
+                          [key]: !reminders[key],
                         });
                       } else {
-                        setReminders({ ...reminders, [key]: checked });
+                        setReminders({
+                          dayBefore: key === "dayBefore",
+                          weekBefore: key === "weekBefore",
+                          monthBefore: key === "monthBefore",
+                        });
                       }
                     }}
                     style={{ marginRight: 8 }}
@@ -215,33 +311,34 @@ export const Form: React.FC<AppointmentFormProps> = ({
             </View>
           )}
         </View>
-      </ScrollView>
 
-      <View style={styles.footer}>
-        <View style={styles.footerButtons}>
-          {onCancel && (
+        {/* Footer Buttons inside ScrollView */}
+        <View style={styles.footer}>
+          <View style={styles.footerButtons}>
+            {onCancel && (
+              <Button
+                label="Cancel"
+                variant="outline"
+                size="md"
+                fullWidth
+                onPress={onCancel}
+                disabled={isLoading}
+                style={styles.cancelButton}
+                textStyle={styles.cancelButtonText}
+              />
+            )}
+
             <Button
-              label="Cancel"
-              variant="outline"
+              label={mode === "edit" ? "Update" : "Save"}
+              variant="light"
               size="md"
               fullWidth
-              onPress={onCancel}
+              onPress={handleSave}
               disabled={isLoading}
-              style={styles.cancelButton}
-              textStyle={styles.cancelButtonText}
             />
-          )}
-
-          <Button
-            label={mode === "edit" ? "Update" : "Save"}
-            variant="light"
-            size="md"
-            fullWidth
-            onPress={handleSave}
-            disabled={!isValid || isLoading}
-          />
+          </View>
         </View>
-      </View>
-    </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };

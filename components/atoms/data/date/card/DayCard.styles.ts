@@ -1,10 +1,12 @@
+import colors from "@theme/colors";
 import { Dimensions, StyleSheet } from "react-native";
+import { Variants } from "../../typography/text/Text.stories";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const MINI_CARD_WIDTH = Math.min(56, Math.floor((SCREEN_WIDTH - 48) / 5));
 const MINI_CARD_HEIGHT = Math.min(
   80,
-  Math.floor((SCREEN_WIDTH - 48) / 5) * 1.4
+  Math.floor((SCREEN_WIDTH - 48) / 5) * 1.4,
 );
 
 export const styles = StyleSheet.create({
@@ -19,25 +21,24 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 6,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "transparent",
+    backgroundColor: "#fff",
     borderWidth: 0,
     borderColor: "transparent",
+    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
   },
   card_outline: {
-    borderWidth: 2,
-    borderColor: "#1976d2",
+    borderColor: "transparent",
     backgroundColor: "#fff",
     borderRadius: 20,
   },
-  card_light: {
-    borderWidth: 2,
-    borderColor: "#1976d2",
-    backgroundColor: "rgba(25, 118, 210, 0.1)",
+  card_selected: {
+    borderWidth: 0,
+    borderColor: "transparent",
+    backgroundColor: colors.primary + "1D", 
     borderRadius: 20,
   },
   card_filled: {
-    borderWidth: 2,
-    borderColor: "#1976d2",
+    borderColor: "transparent",
     backgroundColor: "#1976d2",
     borderRadius: 20,
   },

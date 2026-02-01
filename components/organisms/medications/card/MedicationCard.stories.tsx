@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Medication } from "../../../types";
+import { Medication } from "../../../../types";
 import { MedicationCard } from "./MedicationCard";
 
 const mockMedication: Medication = {
@@ -19,7 +19,7 @@ const mockMedication: Medication = {
 };
 
 const meta: Meta<typeof MedicationCard> = {
-  title: "Medications/MedicationCard",
+  title: "Organisms/Medications/MedicationCard",
   component: MedicationCard,
   argTypes: {
     onPress: { action: "pressed" },

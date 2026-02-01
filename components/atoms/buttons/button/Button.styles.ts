@@ -15,7 +15,6 @@ export const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
   fullWidth: {
-    width: "100%",
     flex: 1,
   },
   rounded: {

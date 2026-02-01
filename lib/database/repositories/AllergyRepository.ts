@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import * as Crypto from "expo-crypto";
 import { Allergy } from "../../../types";
 import { dbManager } from "../DatabaseManager";
 
@@ -7,13 +7,13 @@ export class AllergyRepository {
     userId: string,
     data: Omit<Allergy, "id" | "createdAt" | "updatedAt">,
   ): Promise<Allergy> {
-    const id = uuidv4();
+    const id = Crypto.randomUUID();
     const now = new Date().toISOString();
 
     await dbManager.insert(
       `
       INSERT INTO allergies (
-        id, userId, allergen, category, severity, symptoms, notes, createdAt, updatedAt
+        id, userId, name, category, severity, symptoms, notes, createdAt, updatedAt
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
       [
@@ -40,7 +40,7 @@ export class AllergyRepository {
     return results.map((row: any) => ({
       id: row.id,
       userId: row.userId,
-      name: row.allergen,
+      name: row.name,
       category: row.category,
       severity: row.severity,
       symptoms: JSON.parse(row.symptoms || "[]"),
@@ -60,7 +60,7 @@ export class AllergyRepository {
     return {
       id: row.id,
       userId: row.userId,
-      name: row.allergen,
+      name: row.name,
       category: row.category,
       severity: row.severity,
       symptoms: JSON.parse(row.symptoms || "[]"),
@@ -79,7 +79,7 @@ export class AllergyRepository {
     const values: any[] = [];
 
     if (data.name !== undefined) {
-      updates.push("allergen = ?");
+      updates.push("name = ?");
       values.push(data.name);
     }
     if (data.category !== undefined) {

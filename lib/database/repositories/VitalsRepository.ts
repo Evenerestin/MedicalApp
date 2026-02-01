@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import * as Crypto from "expo-crypto";
 import { VitalMeasurement } from "../../../types";
 import { dbManager } from "../DatabaseManager";
 
@@ -7,13 +7,13 @@ export class VitalsRepository {
     userId: string,
     data: Omit<VitalMeasurement, "id" | "createdAt">,
   ): Promise<VitalMeasurement> {
-    const id = uuidv4();
+    const id = Crypto.randomUUID();
     const now = new Date().toISOString();
 
     await dbManager.insert(
       `
       INSERT INTO vital_measurements (
-        id, userId, type, value, secondaryValue, tertiaryValue, unit, notes, timestamp, createdAt
+        id, userId, type, value, secondaryValue, tertiaryValue, unit, notes, measuredAt, createdAt
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
       [
@@ -35,7 +35,7 @@ export class VitalsRepository {
 
   static async getByUserId(userId: string): Promise<VitalMeasurement[]> {
     const results = await dbManager.getAll(
-      "SELECT * FROM vital_measurements WHERE userId = ? ORDER BY timestamp DESC",
+      "SELECT * FROM vital_measurements WHERE userId = ? ORDER BY measuredAt DESC",
       [userId],
     );
     return results.map((row: any) => ({
@@ -53,7 +53,7 @@ export class VitalsRepository {
           : undefined,
       unit: row.unit,
       notes: row.notes,
-      measuredAt: row.timestamp,
+      measuredAt: row.measuredAt,
       createdAt: row.createdAt,
     }));
   }
@@ -67,7 +67,7 @@ export class VitalsRepository {
     const cutoff = cutoffDate.toISOString();
 
     const results = await dbManager.getAll(
-      "SELECT * FROM vital_measurements WHERE userId = ? AND timestamp >= ? ORDER BY timestamp DESC",
+      "SELECT * FROM vital_measurements WHERE userId = ? AND measuredAt >= ? ORDER BY measuredAt DESC",
       [userId, cutoff],
     );
     return results.map((row: any) => ({
@@ -85,7 +85,7 @@ export class VitalsRepository {
           : undefined,
       unit: row.unit,
       notes: row.notes,
-      measuredAt: row.timestamp,
+      measuredAt: row.measuredAt,
       createdAt: row.createdAt,
     }));
   }
@@ -112,7 +112,7 @@ export class VitalsRepository {
           : undefined,
       unit: row.unit,
       notes: row.notes,
-      measuredAt: row.timestamp,
+      measuredAt: row.measuredAt,
       createdAt: row.createdAt,
     };
   }
@@ -149,7 +149,7 @@ export class VitalsRepository {
       values.push(data.notes);
     }
     if (data.measuredAt !== undefined) {
-      updates.push("timestamp = ?");
+      updates.push("measuredAt = ?");
       values.push(data.measuredAt);
     }
 

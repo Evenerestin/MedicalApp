@@ -4,19 +4,24 @@ export const styles = StyleSheet.create({
   base: {
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: 16,
+    borderRadius: 4,
     paddingHorizontal: 12,
     paddingVertical: 6,
     alignSelf: "flex-start",
     minHeight: 32,
     gap: 4,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 2,
+    elevation: 2,
   },
   filledSelected: {
     backgroundColor: "#1976d2",
     borderWidth: 0,
   },
   filledUnselected: {
-    backgroundColor: "#e0e0e0",
+    backgroundColor: "#fff",
     borderWidth: 0,
   },
   filledSelectedText: {
@@ -31,7 +36,7 @@ export const styles = StyleSheet.create({
     borderColor: "#1976d2",
   },
   outlineUnselected: {
-    backgroundColor: "transparent",
+    backgroundColor: "#fff",
     borderWidth: 1,
     borderColor: "#bdbdbd",
   },
@@ -47,7 +52,7 @@ export const styles = StyleSheet.create({
     borderColor: "#1976d2",
   },
   lightUnselected: {
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#fff",
     borderWidth: 0,
   },
   lightSelectedText: {
@@ -62,6 +67,8 @@ export const styles = StyleSheet.create({
   text: {
     fontWeight: "500",
     flexShrink: 1,
+    textAlign: "center",
+    flex: 1,
   },
   sm: {
     paddingHorizontal: 8,

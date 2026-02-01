@@ -1,3 +1,4 @@
+import colors from "@theme/colors";
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
@@ -7,9 +8,9 @@ export default StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: "#e0e0e0",
+    borderBottomColor: colors.border,
   },
   title: {
     fontSize: 18,

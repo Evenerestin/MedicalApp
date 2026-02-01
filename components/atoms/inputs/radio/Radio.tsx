@@ -86,7 +86,7 @@ const radioStyles = StyleSheet.create({
   label: {
     color: "#222",
     fontSize: 16,
-    fontWeight: "500",
+    fontWeight: "400",
   },
   disabled: {
     opacity: 0.5,

@@ -8,9 +8,6 @@ export interface HeaderProps {
   notificationCount: number;
   onNotificationsPress: () => void;
   onProfilePress: () => void;
-  getGreeting: () => string;
-  getInitials: (name: string) => string;
-  styles: any;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -18,14 +15,11 @@ export const Header: React.FC<HeaderProps> = ({
   notificationCount,
   onNotificationsPress,
   onProfilePress,
-  getGreeting,
-  getInitials,
-  styles,
 }) => {
   return (
     <View style={styles.header}>
       <View>
-        <Text style={styles.greeting}>{getGreeting()}</Text>
+        <Text style={styles.greeting}>Welcome back!</Text>
         <Text style={styles.userName}>{userName}</Text>
       </View>
       <View>

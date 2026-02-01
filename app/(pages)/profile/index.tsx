@@ -1,14 +1,16 @@
 import { Ionicons } from "@expo/vector-icons";
+import colors from "@theme/colors";
 import { useRouter } from "expo-router";
 import React from "react";
 import {
   ScrollView,
   StyleSheet,
-  Switch,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Toggle } from "../../../components/atoms/inputs/toggle/Toggle";
 import {
   useAppDispatch,
   useSettings,
@@ -21,8 +23,11 @@ export default function ProfilePage() {
   const settings = useSettings();
   const dispatch = useAppDispatch();
 
-  const getInitials = (firstName: string, lastName: string) => {
-    return `${firstName[0]}${lastName[0]}`.toUpperCase();
+  const getInitials = (name?: string) => {
+    if (!name) return "G";
+    const parts = name.trim().split(" ");
+    if (parts.length === 1) return parts[0][0].toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   };
 
   const handleEditProfile = () => {
@@ -35,7 +40,7 @@ export default function ProfilePage() {
 
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
-    // Navigate to login screen if you have one
+    router.replace("/(auth)");
   };
 
   const toggleMenstrualCalendar = () => {
@@ -53,33 +58,27 @@ export default function ProfilePage() {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={["bottom"]}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Profile</Text>
       </View>
 
-      <ScrollView style={styles.content}>
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={{ paddingBottom: 48 }}
+      >
         {/* User Info Card */}
         <View style={styles.userCard}>
           <View style={styles.avatar}>
-            <Text style={styles.avatarText}>
-              {user ? getInitials(user.firstName, user.lastName) : "G"}
-            </Text>
+            <Text style={styles.avatarText}>{getInitials(user?.name)}</Text>
           </View>
           <View style={styles.userInfo}>
-            <Text style={styles.userName}>
-              {user ? `${user.firstName} ${user.lastName}` : "Guest User"}
-            </Text>
+            <Text style={styles.userName}>{user?.name || "Guest User"}</Text>
             <Text style={styles.userEmail}>
               {user?.email || "Not logged in"}
             </Text>
           </View>
-          <TouchableOpacity
-            style={styles.editButton}
-            onPress={handleEditProfile}
-          >
-            <Ionicons name="pencil" size={20} color="#152b4f" />
-          </TouchableOpacity>
+          {/* Removed edit icon next to avatar as requested */}
         </View>
 
         {/* ICE Profile Section */}
@@ -105,49 +104,40 @@ export default function ProfilePage() {
               <Ionicons
                 name="notifications-outline"
                 size={22}
-                color="#152b4f"
+                color={colors.primary}
               />
               <Text style={styles.settingLabel}>Notifications</Text>
             </View>
-            <Switch
-              value={settings.notificationsEnabled}
-              onValueChange={toggleNotifications}
-              trackColor={{ false: "#e0e0e0", true: "#a5c4e8" }}
-              thumbColor={settings.notificationsEnabled ? "#152b4f" : "#f4f3f4"}
+            <Toggle
+              checked={settings.notificationsEnabled}
+              onChange={toggleNotifications}
+              label=""
             />
           </View>
 
           <View style={styles.settingItem}>
             <View style={styles.settingInfo}>
-              <Ionicons name="calendar-outline" size={22} color="#152b4f" />
+              <Ionicons
+                name="calendar-outline"
+                size={22}
+                color={colors.primary}
+              />
               <Text style={styles.settingLabel}>Menstrual Calendar</Text>
             </View>
-            <Switch
-              value={settings.showMenstrualCalendar}
-              onValueChange={toggleMenstrualCalendar}
-              trackColor={{ false: "#e0e0e0", true: "#a5c4e8" }}
-              thumbColor={
-                settings.showMenstrualCalendar ? "#152b4f" : "#f4f3f4"
-              }
+            <Toggle
+              checked={settings.showMenstrualCalendar}
+              onChange={toggleMenstrualCalendar}
+              label=""
             />
           </View>
 
           <TouchableOpacity style={styles.settingItem}>
             <View style={styles.settingInfo}>
-              <Ionicons name="water-outline" size={22} color="#152b4f" />
-              <Text style={styles.settingLabel}>Glucose Unit</Text>
-            </View>
-            <View style={styles.settingValue}>
-              <Text style={styles.settingValueText}>
-                {settings.glucoseUnit}
-              </Text>
-              <Ionicons name="chevron-forward" size={20} color="#999999" />
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.settingItem}>
-            <View style={styles.settingInfo}>
-              <Ionicons name="language-outline" size={22} color="#152b4f" />
+              <Ionicons
+                name="language-outline"
+                size={22}
+                color={colors.primary}
+              />
               <Text style={styles.settingLabel}>Language</Text>
             </View>
             <View style={styles.settingValue}>
@@ -168,7 +158,7 @@ export default function ProfilePage() {
               <Ionicons
                 name="information-circle-outline"
                 size={22}
-                color="#152b4f"
+                color={colors.primary}
               />
               <Text style={styles.settingLabel}>About App</Text>
             </View>
@@ -180,7 +170,7 @@ export default function ProfilePage() {
               <Ionicons
                 name="document-text-outline"
                 size={22}
-                color="#152b4f"
+                color={colors.primary}
               />
               <Text style={styles.settingLabel}>Privacy Policy</Text>
             </View>
@@ -189,7 +179,11 @@ export default function ProfilePage() {
 
           <TouchableOpacity style={styles.settingItem}>
             <View style={styles.settingInfo}>
-              <Ionicons name="help-circle-outline" size={22} color="#152b4f" />
+              <Ionicons
+                name="help-circle-outline"
+                size={22}
+                color={colors.primary}
+              />
               <Text style={styles.settingLabel}>Help & Support</Text>
             </View>
             <Ionicons name="chevron-forward" size={20} color="#999999" />
@@ -204,7 +198,7 @@ export default function ProfilePage() {
 
         <Text style={styles.versionText}>Version 1.0.0</Text>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -217,7 +211,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 60,
     paddingBottom: 16,
-    backgroundColor: "#152b4f",
+    backgroundColor: colors.primary,
   },
   headerTitle: {
     fontSize: 24,
@@ -245,7 +239,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: "#152b4f",
+    backgroundColor: colors.primary,
     justifyContent: "center",
     alignItems: "center",
   },

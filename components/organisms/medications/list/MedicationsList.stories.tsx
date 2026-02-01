@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Medication } from "../../../types";
+import { Medication } from "../../../../types";
 import { MedicationsList } from "./MedicationsList";
 
 const mockMedications: Medication[] = [
@@ -50,7 +50,7 @@ const mockMedications: Medication[] = [
 ];
 
 const meta: Meta<typeof MedicationsList> = {
-  title: "Medications/MedicationsList",
+  title: "Organisms/Medications/MedicationsList",
   component: MedicationsList,
   parameters: {
     layout: "fullscreen",
@@ -68,21 +68,29 @@ export default meta;
 
 type Story = StoryObj<typeof MedicationsList>;
 
-export const Default: Story = {
+export const Active: Story = {
   args: {
     medications: mockMedications,
   },
 };
 
-export const Empty: Story = {
+export const Inactive: Story = {
+  args: {
+    medications: mockMedications.map((m) => ({ ...m, isActive: false })),
+    showInactive: true,
+  },
+};
+
+export const EmptyActive: Story = {
   args: {
     medications: [],
+    showInactive: false,
   },
 };
 
-export const ActiveOnly: Story = {
+export const EmptyInactive: Story = {
   args: {
-    medications: mockMedications,
-    showInactive: false,
+    medications: [],
+    showInactive: true,
   },
 };

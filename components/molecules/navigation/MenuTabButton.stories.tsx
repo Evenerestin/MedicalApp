@@ -13,7 +13,6 @@ export default meta;
 export const Default: StoryObj<typeof MenuTabButton> = {
   args: {
     icon: IconHome,
-    label: "Home",
     active: false,
     onPress: () => {},
   },
@@ -22,7 +21,6 @@ export const Default: StoryObj<typeof MenuTabButton> = {
 export const Active: StoryObj<typeof MenuTabButton> = {
   args: {
     icon: IconUser,
-    label: "Profile",
     active: true,
     onPress: () => {},
   },

@@ -1,5 +1,12 @@
-import React, { createContext, ReactNode, useContext, useReducer } from "react";
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useReducer,
+} from "react";
 import {
+  Allergy,
   AppNotification,
   Appointment,
   AppSettings,
@@ -21,6 +28,7 @@ export interface AppState {
   vitalMeasurements: VitalMeasurement[];
   glucoseMeasurements: GlucoseMeasurement[];
   menstrualCycles: MenstrualCycle[];
+  allergies: Allergy[];
   iceProfile: ICEProfile | null;
   notifications: AppNotification[];
 
@@ -46,6 +54,7 @@ const initialState: AppState = {
   vitalMeasurements: [],
   glucoseMeasurements: [],
   menstrualCycles: [],
+  allergies: [],
   iceProfile: null,
   notifications: [],
 
@@ -80,6 +89,14 @@ type AppAction =
   | { type: "ADD_NOTIFICATION"; payload: AppNotification }
   | { type: "MARK_NOTIFICATION_READ"; payload: string }
   | { type: "MARK_ALL_NOTIFICATIONS_READ" }
+  | { type: "DELETE_NOTIFICATION"; payload: string }
+  | { type: "SET_ALLERGIES"; payload: Allergy[] }
+  | { type: "ADD_ALLERGY"; payload: Allergy }
+  | { type: "UPDATE_ALLERGY"; payload: Allergy }
+  | { type: "DELETE_ALLERGY"; payload: string }
+  | { type: "DELETE_VITAL_MEASUREMENT"; payload: string }
+  | { type: "DELETE_GLUCOSE_MEASUREMENT"; payload: string }
+  | { type: "DELETE_MENSTRUAL_CYCLE"; payload: string }
   | { type: "UPDATE_SETTINGS"; payload: Partial<AppSettings> };
 
 function appReducer(state: AppState, action: AppAction): AppState {
@@ -205,6 +222,52 @@ function appReducer(state: AppState, action: AppAction): AppState {
           readAt: n.readAt || new Date().toISOString(),
         })),
       };
+    case "DELETE_NOTIFICATION":
+      return {
+        ...state,
+        notifications: state.notifications.filter(
+          (n) => n.id !== action.payload,
+        ),
+      };
+
+    case "SET_ALLERGIES":
+      return { ...state, allergies: action.payload };
+    case "ADD_ALLERGY":
+      return { ...state, allergies: [...state.allergies, action.payload] };
+    case "UPDATE_ALLERGY":
+      return {
+        ...state,
+        allergies: state.allergies.map((a) =>
+          a.id === action.payload.id ? action.payload : a,
+        ),
+      };
+    case "DELETE_ALLERGY":
+      return {
+        ...state,
+        allergies: state.allergies.filter((a) => a.id !== action.payload),
+      };
+
+    case "DELETE_VITAL_MEASUREMENT":
+      return {
+        ...state,
+        vitalMeasurements: state.vitalMeasurements.filter(
+          (v) => v.id !== action.payload,
+        ),
+      };
+    case "DELETE_GLUCOSE_MEASUREMENT":
+      return {
+        ...state,
+        glucoseMeasurements: state.glucoseMeasurements.filter(
+          (g) => g.id !== action.payload,
+        ),
+      };
+    case "DELETE_MENSTRUAL_CYCLE":
+      return {
+        ...state,
+        menstrualCycles: state.menstrualCycles.filter(
+          (c) => c.id !== action.payload,
+        ),
+      };
 
     case "UPDATE_SETTINGS":
       return { ...state, settings: { ...state.settings, ...action.payload } };
@@ -223,6 +286,63 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(appReducer, initialState);
+
+  useEffect(() => {
+    const initializeApp = async () => {
+      try {
+        console.log("🚀 Starting app initialization...");
+        const { DatabaseService } = await import("../lib/database");
+        await DatabaseService.initializeDatabase();
+        console.log("✅ App initialized successfully");
+        dispatch({ type: "SET_LOADING", payload: false });
+      } catch (error) {
+        console.error("❌ Failed to initialize app:", error);
+        console.error("Error details:", JSON.stringify(error, null, 2));
+        if (typeof alert !== "undefined") {
+          alert(
+            "Database initialization failed. Please restart the app. Error: " +
+              error,
+          );
+        }
+        dispatch({ type: "SET_LOADING", payload: false });
+      }
+    };
+
+    initializeApp();
+  }, []);
+
+  useEffect(() => {
+    const loadUserData = async () => {
+      if (!state.user) return;
+
+      try {
+        const { DatabaseService } = await import("../lib/database");
+        const data = await DatabaseService.loadUserData(state.user.id);
+
+        dispatch({ type: "SET_APPOINTMENTS", payload: data.appointments });
+        dispatch({ type: "SET_MEDICATIONS", payload: data.medications });
+        dispatch({
+          type: "SET_VITAL_MEASUREMENTS",
+          payload: data.vitalMeasurements,
+        });
+        dispatch({
+          type: "SET_GLUCOSE_MEASUREMENTS",
+          payload: data.glucoseMeasurements,
+        });
+        dispatch({ type: "SET_ALLERGIES", payload: data.allergies });
+        dispatch({
+          type: "SET_MENSTRUAL_CYCLES",
+          payload: data.menstrualCycles,
+        });
+        dispatch({ type: "SET_ICE_PROFILE", payload: data.iceProfile });
+        dispatch({ type: "SET_NOTIFICATIONS", payload: data.notifications });
+      } catch (error) {
+        console.error("Failed to load user data:", error);
+      }
+    };
+
+    loadUserData();
+  }, [state.user?.id]);
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>
@@ -296,4 +416,9 @@ export const useICEProfile = () => {
 export const useSettings = () => {
   const { state } = useAppContext();
   return state.settings;
+};
+
+export const useAllergies = () => {
+  const { state } = useAppContext();
+  return state.allergies;
 };

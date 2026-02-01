@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import {
   Form,
   FormData,
@@ -8,14 +8,16 @@ import {
 import {
   useAppDispatch,
   useAppointments,
+  useUser,
 } from "../../../../context/AppContext";
-import { Appointment } from "../../../../types";
+import { DatabaseService } from "../../../../lib/database";
 
 export default function AppointmentDetailPage() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const appointments = useAppointments();
   const dispatch = useAppDispatch();
+  const user = useUser();
 
   const appointment = appointments.find((apt) => apt.id === id);
 
@@ -27,39 +29,38 @@ export default function AppointmentDetailPage() {
     );
   }
 
-  const handleSave = (data: FormData) => {
-    const updatedAppointment: Appointment = {
-      ...appointment,
-      title: data.title,
-      description: data.description,
-      date: data.date?.toISOString().split("T")[0] || appointment.date,
-      time: data.time,
-      address: data.address,
-      doctorName: data.doctor,
-      reminders: data.reminders ? ["day"] : [],
-      updatedAt: new Date().toISOString(),
-    };
+  const handleSave = async (data: FormData) => {
+    if (!user) return;
 
-    dispatch({ type: "UPDATE_APPOINTMENT", payload: updatedAppointment });
-    router.back();
+    try {
+      const updatedAppointment = await DatabaseService.updateAppointment(
+        appointment.id,
+        {
+          title: data.title,
+          description: data.description,
+          date: data.date?.toISOString().split("T")[0] || appointment.date,
+          time: data.time,
+          address: data.address,
+          doctorName: data.doctor,
+          reminders: data.reminders ? ["day"] : [],
+        },
+      );
+
+      dispatch({ type: "UPDATE_APPOINTMENT", payload: updatedAppointment });
+      router.back();
+    } catch (error) {
+      console.error("Failed to update appointment:", error);
+    }
   };
 
-  const handleDelete = () => {
-    Alert.alert(
-      "Delete Appointment",
-      "Are you sure you want to delete this appointment?",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Delete",
-          style: "destructive",
-          onPress: () => {
-            dispatch({ type: "DELETE_APPOINTMENT", payload: appointment.id });
-            router.back();
-          },
-        },
-      ]
-    );
+  const handleDelete = async () => {
+    try {
+      await DatabaseService.deleteAppointment(appointment.id);
+      dispatch({ type: "DELETE_APPOINTMENT", payload: appointment.id });
+      router.back();
+    } catch (error) {
+      console.error("Failed to delete appointment:", error);
+    }
   };
 
   const handleCancel = () => {

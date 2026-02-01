@@ -1,94 +1,117 @@
 import { useRouter } from "expo-router";
 import React from "react";
-import { HomeScreen } from "../../components/organisms/home";
+import HomeTemplate from "../../components/templates/home/HomeTemplate";
 import {
+  useAppDispatch,
   useAppointments,
   useGlucoseMeasurements,
   useICEProfile,
   useMedications,
   useNotifications,
+  useSettings,
   useUser,
   useVitalMeasurements,
 } from "../../context/AppContext";
+import { DatabaseService } from "../../lib/database/DatabaseService";
 
 export default function HomePage() {
   const router = useRouter();
   const user = useUser();
+  const dispatch = useAppDispatch();
   const appointments = useAppointments();
   const medications = useMedications();
   const vitalMeasurements = useVitalMeasurements();
   const glucoseMeasurements = useGlucoseMeasurements();
   const iceProfile = useICEProfile();
   const notifications = useNotifications();
+  const settings = useSettings();
 
   const today = new Date();
-  const todayStr = today.toISOString().split("T")[0];
-  const todayAppointments = appointments.filter((apt) => apt.date === todayStr);
+  today.setHours(0, 0, 0, 0);
+  const [selectedDate, setSelectedDate] = React.useState<Date>(today);
+  const [takenMedications, setTakenMedications] = React.useState<Set<string>>(
+    new Set(),
+  );
 
-  const activeMedications = medications.filter((med) => med.isActive);
-  const upcomingMedications =
-    activeMedications.length > 0
-      ? [
-          {
-            time: "8:00 AM",
-            medications: activeMedications.filter((med) =>
-              med.times.includes("08:00")
-            ),
-          },
-          {
-            time: "2:00 PM",
-            medications: activeMedications.filter((med) =>
-              med.times.includes("14:00")
-            ),
-          },
-          {
-            time: "8:00 PM",
-            medications: activeMedications.filter((med) =>
-              med.times.includes("20:00")
-            ),
-          },
-        ].filter((r) => r.medications.length > 0)
-      : [];
+  const miniCalendarDays = React.useMemo(() => {
+    const days = [];
+    for (let i = -3; i <= 10; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      date.setHours(0, 0, 0, 0);
+      days.push({
+        date,
+        selected:
+          selectedDate &&
+          date.getFullYear() === selectedDate.getFullYear() &&
+          date.getMonth() === selectedDate.getMonth() &&
+          date.getDate() === selectedDate.getDate(),
+        disabled: false,
+      });
+    }
+    return days;
+  }, [selectedDate, today]);
 
-  const getLatestVital = (type: string) =>
-    vitalMeasurements
-      .filter((v) => v.type === type)
-      .sort(
-        (a, b) =>
-          new Date(b.measuredAt).getTime() - new Date(a.measuredAt).getTime()
-      )[0];
+  const selectedDateStr = selectedDate.toISOString().split("T")[0];
+  const selectedAppointments = appointments.filter(
+    (apt) => apt.date === selectedDateStr,
+  );
 
-  const latestGlucose = glucoseMeasurements.sort(
-    (a, b) =>
-      new Date(b.measuredAt).getTime() - new Date(a.measuredAt).getTime()
-  )[0];
-
-  const recentVitals = {
-    bloodPressure: getLatestVital("blood_pressure"),
-    heartRate: getLatestVital("heart_rate"),
-    weight: getLatestVital("weight"),
-    glucose: latestGlucose,
-  };
+  const activeMedications = medications
+    .filter((med) => med.isActive)
+    .map((med) => ({
+      id: med.id,
+      name: med.name,
+      dosage: med.dosage,
+      unit: med.unit,
+      isActive: med.isActive,
+      time: med.times?.[0] || undefined,
+      takenToday: takenMedications.has(med.id),
+      frequency: med.frequency,
+    }));
 
   const unreadNotifications = notifications.filter((n) => !n.isRead).length;
 
+  const handleToggleTaken = (id: string, taken: boolean) => {
+    setTakenMedications((prev) => {
+      const newSet = new Set(prev);
+      if (taken) {
+        newSet.add(id);
+      } else {
+        newSet.delete(id);
+      }
+      return newSet;
+    });
+  };
+
   return (
-    <HomeScreen
-      userName={user ? `${user.firstName} ${user.lastName}` : "Guest"}
-      todayAppointments={todayAppointments}
-      upcomingMedications={upcomingMedications}
-      recentVitals={recentVitals}
-      hasICEProfile={!!iceProfile}
+    <HomeTemplate
+      userName={user ? user.name : "Guest"}
       notificationCount={unreadNotifications}
       onNotificationsPress={() => router.push("/(pages)/notifications")}
       onProfilePress={() => router.push("/(pages)/profile")}
-      onCalendarPress={() => router.push("/(pages)/calendar")}
-      onMedicationsPress={() => router.push("/(pages)/medications")}
-      onVitalsPress={() => router.push("/(pages)/health/vitals")}
-      onGlucosePress={() => router.push("/(pages)/health/glucose")}
+      hasICEProfile={!!iceProfile}
       onICEPress={() => router.push("/(pages)/profile/ice")}
-      onViewAllAppointments={() => router.push("/(pages)/calendar")}
-      onViewAllMedications={() => router.push("/(pages)/medications")}
+      miniCalendarDays={miniCalendarDays}
+      onDayPress={(date) => setSelectedDate(date)}
+      appointments={selectedAppointments}
+      onAddAppointmentPress={() =>
+        router.push("/(pages)/calendar/appointment/new")
+      }
+      onAppointmentPress={(id) =>
+        router.push(`/(pages)/calendar/appointment/${id}`)
+      }
+      medications={activeMedications}
+      onAddMedicationPress={() => router.push("/(pages)/medications/new")}
+      onMedicationPress={(id) => router.push(`/(pages)/medications/${id}`)}
+      onToggleTaken={handleToggleTaken}
+      onActionCardPress={(preset) => {
+        if (preset === "allergies") router.push("/(pages)/health/allergies");
+        else if (preset === "medications") router.push("/(pages)/medications");
+        else if (preset === "vitals") router.push("/(pages)/health/vitals");
+        else if (preset === "cycle") router.push("/(pages)/health/menstrual");
+      }}
+      showMenstrualCalendar={settings.showMenstrualCalendar}
     />
   );
 }

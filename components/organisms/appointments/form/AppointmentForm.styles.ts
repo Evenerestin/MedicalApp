@@ -48,16 +48,16 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   footer: {
-    padding: 16,
-    backgroundColor: "#fff",
-    borderTopWidth: 1,
-    borderTopColor: "#e0e0e0",
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 40,
+    backgroundColor: "transparent",
   },
   footerButtons: {
     flexDirection: "row",
+    gap: 12,
     justifyContent: "space-between",
-    marginVertical: 8,
-    gap: 8,
+    alignItems: "center",
   },
   button: {
     flex: 1,

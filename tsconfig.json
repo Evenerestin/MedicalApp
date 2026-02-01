@@ -10,7 +10,6 @@
       "@atoms/*": ["components/atoms/*"],
       "@molecules/*": ["components/molecules/*"],
       "@organisms/*": ["components/organisms/*"]
-      // Add more as needed
     }
   },
   "include": [

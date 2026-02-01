@@ -81,9 +81,10 @@ export const appointmentsListStyles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "#000",
-    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 2,
   },
   fabText: {
     color: "#fff",

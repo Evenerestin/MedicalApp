@@ -5,14 +5,19 @@ import {
   MedicationForm,
   MedicationFormData,
 } from "../../../components/organisms/medications";
-import { useAppDispatch, useMedications } from "../../../context/AppContext";
-import { Medication } from "../../../types";
+import {
+  useAppDispatch,
+  useMedications,
+  useUser,
+} from "../../../context/AppContext";
+import { DatabaseService } from "../../../lib/database";
 
 export default function MedicationDetailPage() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const medications = useMedications();
   const dispatch = useAppDispatch();
+  const user = useUser();
 
   const medication = medications.find((med) => med.id === id);
 
@@ -24,21 +29,28 @@ export default function MedicationDetailPage() {
     );
   }
 
-  const handleSave = (data: MedicationFormData) => {
-    const updatedMedication: Medication = {
-      ...medication,
-      name: data.name,
-      dosage: data.dosage,
-      unit: data.unit,
-      frequency: data.frequency,
-      times: data.times,
-      notes: data.notes,
-      remindersEnabled: data.remindersEnabled,
-      updatedAt: new Date().toISOString(),
-    };
+  const handleSave = async (data: MedicationFormData) => {
+    if (!user) return;
 
-    dispatch({ type: "UPDATE_MEDICATION", payload: updatedMedication });
-    router.back();
+    try {
+      const updatedMedication = await DatabaseService.updateMedication(
+        medication.id,
+        {
+          name: data.name,
+          dosage: data.dosage,
+          unit: data.unit,
+          frequency: data.frequency,
+          times: data.times,
+          notes: data.notes,
+          remindersEnabled: data.remindersEnabled,
+        },
+      );
+
+      dispatch({ type: "UPDATE_MEDICATION", payload: updatedMedication });
+      router.back();
+    } catch (error) {
+      console.error("Failed to update medication:", error);
+    }
   };
 
   const handleDelete = () => {
@@ -50,12 +62,17 @@ export default function MedicationDetailPage() {
         {
           text: "Delete",
           style: "destructive",
-          onPress: () => {
-            dispatch({ type: "DELETE_MEDICATION", payload: medication.id });
-            router.back();
+          onPress: async () => {
+            try {
+              await DatabaseService.deleteMedication(medication.id);
+              dispatch({ type: "DELETE_MEDICATION", payload: medication.id });
+              router.back();
+            } catch (error) {
+              console.error("Failed to delete medication:", error);
+            }
           },
         },
-      ]
+      ],
     );
   };
 

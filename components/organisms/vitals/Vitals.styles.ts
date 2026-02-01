@@ -1,3 +1,4 @@
+import colors from "@theme/colors";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
@@ -5,9 +6,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f8f9fa",
   },
-  scrollContent: {
-    padding: 16,
-  },
+  scrollContent: {},
 
   header: {
     flexDirection: "row",
@@ -22,13 +21,16 @@ export const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: "600",
-    color: "#152b4f",
+    color: colors.primary,
+    flex: 1,
+    textAlign: "center",
   },
   addButton: {
     width: 40,
-    height: 40,
+    paddingTop: 4,
+    paddingBottom: 8,
     borderRadius: 20,
-    backgroundColor: "#152b4f",
+    backgroundColor: colors.primary,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -39,7 +41,9 @@ export const styles = StyleSheet.create({
 
   tabContainer: {
     flexDirection: "row",
-    backgroundColor: "#ffffff",
+    paddingTop: 8,
+    paddingHorizontal: 16,
+    paddingBottom: 16,
     borderBottomWidth: 1,
     borderBottomColor: "#e0e0e0",
   },
@@ -51,7 +55,7 @@ export const styles = StyleSheet.create({
     borderBottomColor: "transparent",
   },
   tabActive: {
-    borderBottomColor: "#152b4f",
+    borderBottomColor: colors.primary,
   },
   tabText: {
     fontSize: 14,
@@ -59,7 +63,7 @@ export const styles = StyleSheet.create({
     fontWeight: "500",
   },
   tabTextActive: {
-    color: "#152b4f",
+    color: colors.primary,
     fontWeight: "600",
   },
 
@@ -76,7 +80,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "#f0f4f8",
   },
   periodButtonActive: {
-    backgroundColor: "#152b4f",
+    backgroundColor: colors.primary,
   },
   periodButtonText: {
     fontSize: 14,
@@ -124,7 +128,7 @@ export const styles = StyleSheet.create({
   measurementValue: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#152b4f",
+    color: colors.primary,
   },
   measurementValueSecondary: {
     fontSize: 16,
@@ -174,6 +178,7 @@ export const styles = StyleSheet.create({
   formHeader: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 16,
     paddingVertical: 16,
     backgroundColor: "#ffffff",
@@ -183,7 +188,9 @@ export const styles = StyleSheet.create({
   formTitle: {
     fontSize: 20,
     fontWeight: "600",
-    color: "#152b4f",
+    color: colors.primary,
+    flex: 1,
+    textAlign: "center",
   },
   formScrollContent: {
     padding: 16,
@@ -202,7 +209,7 @@ export const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#152b4f",
+    color: colors.primary,
     marginBottom: 16,
   },
   inputContainer: {
@@ -225,7 +232,7 @@ export const styles = StyleSheet.create({
     borderColor: "#e0e0e0",
   },
   inputFocused: {
-    borderColor: "#152b4f",
+    borderColor: colors.primary,
     backgroundColor: "#ffffff",
   },
   row: {
@@ -254,7 +261,7 @@ export const styles = StyleSheet.create({
   },
   typeOptionSelected: {
     backgroundColor: "#e8eef6",
-    borderColor: "#152b4f",
+    borderColor: colors.primary,
   },
   typeOptionIcon: {
     marginRight: 8,
@@ -264,13 +271,13 @@ export const styles = StyleSheet.create({
     color: "#666666",
   },
   typeOptionTextSelected: {
-    color: "#152b4f",
+    color: colors.primary,
     fontWeight: "500",
   },
 
   submitButton: {
     height: 48,
-    backgroundColor: "#152b4f",
+    backgroundColor: colors.primary,
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
@@ -285,6 +292,22 @@ export const styles = StyleSheet.create({
     color: "#ffffff",
   },
 
+  footer: {
+    paddingHorizontal: 16,
+    paddingBottom: 32,
+    paddingTop: 8,
+    backgroundColor: "transparent",
+    width: "100%",
+    marginBottom: 16,
+  },
+  footerButtons: {
+    flexDirection: "row",
+    gap: 12,
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+  },
+
   chartContainer: {
     backgroundColor: "#ffffff",
     borderRadius: 12,
@@ -294,7 +317,7 @@ export const styles = StyleSheet.create({
   chartTitle: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#152b4f",
+    color: colors.primary,
     marginBottom: 16,
   },
   chartPlaceholder: {

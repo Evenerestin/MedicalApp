@@ -4,7 +4,6 @@ import { Menu } from "../../components/organisms/navigation/Menu";
 
 export default function PagesLayout() {
   const router = useRouter();
-  // Map Menu tab keys to routes
   const handleTabPress = (key: string) => {
     switch (key) {
       case "home":

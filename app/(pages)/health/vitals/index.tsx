@@ -1,5 +1,6 @@
 import { useRouter } from "expo-router";
 import React from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { VitalsHistory } from "../../../../components/organisms/vitals";
 import { useVitalMeasurements } from "../../../../context/AppContext";
 
@@ -16,10 +17,12 @@ export default function VitalsPage() {
   };
 
   return (
-    <VitalsHistory
-      measurements={measurements}
-      onAddPress={handleAddMeasurement}
-      onBack={handleBack}
-    />
+    <SafeAreaView style={{ flex: 1 }} edges={["top", "bottom"]}>
+      <VitalsHistory
+        measurements={measurements}
+        onAddPress={handleAddMeasurement}
+        onBack={handleBack}
+      />
+    </SafeAreaView>
   );
 }

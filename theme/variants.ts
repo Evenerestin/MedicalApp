@@ -25,11 +25,11 @@ export function getVariantConfig(
     case "light":
       let bg =
         typeof accentColor === "string" && accentColor.startsWith("#")
-          ? accentColor + "4D"
+          ? accentColor + "2D"
           : accentColor;
       return {
         background: bg,
-        border: accentColor,
+        border: "transparent",
         text: accentColor,
         icon: accentColor,
       };

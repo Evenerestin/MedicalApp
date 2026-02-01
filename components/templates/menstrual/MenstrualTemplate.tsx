@@ -1,35 +1,17 @@
 import { IconPlus } from "@tabler/icons-react-native";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { MenstrualCycle } from "../../../types";
+import { useMenstrualCycles } from "../../../context/AppContext";
 import { MenstrualCalendar } from "../../organisms/menstrual/MenstrualCalendar";
-
-const mockCycles: MenstrualCycle[] = [
-  {
-    id: "1",
-    userId: "user1",
-    startDate: new Date(Date.now() - 28 * 24 * 60 * 60 * 1000)
-      .toISOString()
-      .split("T")[0],
-    endDate: new Date(Date.now() - 24 * 24 * 60 * 60 * 1000)
-      .toISOString()
-      .split("T")[0],
-    cycleLength: 28,
-    periodLength: 5,
-    symptoms: ["cramps", "fatigue"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-];
 
 export default function MenstrualScreen() {
   const router = useRouter();
-  const [cycles, setCycles] = useState<MenstrualCycle[]>(mockCycles);
+  const cycles = useMenstrualCycles();
 
   const handleAddNew = () => {
-    router.push("/health/menstrual");
+    router.push("/health/menstrual/new" as any);
   };
 
   return (

@@ -1,16 +1,20 @@
 import { Ionicons } from "@expo/vector-icons";
+import colors from "@theme/colors";
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Button } from "../../atoms/buttons/button/Button";
 import { styles } from "./ICE.styles";
 
 export interface ICEEmptyStateProps {
   onCreateProfile?: () => void;
   onBack?: () => void;
+  isReadOnly?: boolean;
 }
 
 export const ICEEmptyState = ({
   onCreateProfile,
   onBack,
+  isReadOnly = false,
 }: ICEEmptyStateProps) => {
   return (
     <View style={styles.container}>
@@ -23,25 +27,33 @@ export const ICEEmptyState = ({
         <Text style={styles.headerTitle}>ICE Profile</Text>
         <View style={{ width: 40 }} />
       </View>
-
-      <View style={styles.emptyState}>
-        <Ionicons
-          name="medkit-outline"
-          size={80}
-          color="#c62828"
-          style={styles.emptyStateIcon}
-        />
-        <Text style={styles.emptyStateText}>No ICE Profile Created</Text>
-        <Text style={styles.emptyStateSubtext}>
-          Create an In Case of Emergency (ICE) profile to store critical medical
-          information that can be accessed quickly in emergencies.
-        </Text>
-
-        <TouchableOpacity style={styles.createButton} onPress={onCreateProfile}>
-          <Ionicons name="add-circle-outline" size={24} color="#ffffff" />
-          <Text style={styles.createButtonText}>Create ICE Profile</Text>
-        </TouchableOpacity>
-      </View>
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
+      >
+        <View style={styles.emptyState}>
+          <Ionicons
+            name="medkit-outline"
+            size={48}
+            color={colors.primary}
+            style={styles.emptyStateIcon}
+          />
+          <Text style={styles.emptyStateText}>No ICE Profile Created</Text>
+          <Text style={styles.emptyStateSubtext}>
+            {isReadOnly
+              ? "No emergency information is available. Please log in to create an ICE profile."
+              : "Create an In Case of Emergency (ICE) profile to store critical medical information that can be accessed quickly in emergencies."}
+          </Text>
+          {!isReadOnly && (
+            <Button
+              label="Create ICE Profile"
+              variant="filled"
+              rounded
+              onPress={onCreateProfile}
+            />
+          )}
+        </View>
+      </ScrollView>
     </View>
   );
 };

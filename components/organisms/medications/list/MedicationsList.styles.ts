@@ -1,3 +1,4 @@
+import colors from "@theme/colors";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
@@ -28,7 +29,7 @@ export const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#152b4f",
+    backgroundColor: colors.primary,
     justifyContent: "center",
     alignItems: "center",
   },

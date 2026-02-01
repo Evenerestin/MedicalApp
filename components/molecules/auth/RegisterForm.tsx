@@ -2,9 +2,7 @@ import {
   IconEye,
   IconEyeOff,
   IconLock,
-  IconMail,
   IconMedicalCross,
-  IconUser,
 } from "@tabler/icons-react-native";
 import React, { useState } from "react";
 import {
@@ -19,9 +17,7 @@ import { Input } from "../../atoms/inputs/input/Input";
 import { authStyles } from "./Auth.styles";
 
 export interface RegisterFormData {
-  firstName: string;
-  lastName: string;
-  email: string;
+  name: string;
   password: string;
   confirmPassword: string;
 }
@@ -39,9 +35,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   isLoading = false,
   error,
 }) => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -49,9 +43,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   const [passwordError, setPasswordError] = useState("");
 
   const isValid =
-    firstName.trim() !== "" &&
-    lastName.trim() !== "" &&
-    email.trim() !== "" &&
+    name.trim() !== "" &&
     password.trim() !== "" &&
     confirmPassword.trim() !== "" &&
     password === confirmPassword;
@@ -64,9 +56,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
 
     if (isValid && !isLoading) {
       onSubmit?.({
-        firstName: firstName.trim(),
-        lastName: lastName.trim(),
-        email: email.trim(),
+        name: name.trim(),
         password,
         confirmPassword,
       });
@@ -93,11 +83,11 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
         keyboardShouldPersistTaps="handled"
       >
         <View style={authStyles.headerContainer}>
-          <View style={authStyles.logoContainer}>
+          <View style={[authStyles.logoContainer, { alignItems: "center" }]}>
             <IconMedicalCross size={60} color="#1976d2" />
-            <Text style={authStyles.appName}>App</Text>
+            <Text style={authStyles.appName}>{"Medical Tracker"}</Text>
           </View>
-          <Text style={authStyles.appTagline}>Desc</Text>
+          {/* Removed Desc text as requested */}
         </View>
 
         <View style={authStyles.formContainer}>
@@ -111,35 +101,12 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
           )}
 
           <View style={authStyles.section}>
-            <View style={{ flexDirection: "row", gap: 8 }}>
             <Input
-              label="First Name"
-              value={firstName}
-              onChangeText={setFirstName}
-              placeholder="Enter your first name"
+              label="Name"
+              value={name}
+              onChangeText={setName}
+              placeholder="Enter your name"
               disabled={isLoading}
-              leftSection={<IconUser size={20} color="#1976d2" />}
-            />
-
-            <Input
-              label="Last Name"
-              value={lastName}
-              onChangeText={setLastName}
-              placeholder="Enter your last name"
-              disabled={isLoading}
-              leftSection={<IconUser size={20} color="#1976d2" />}
-            />
-            </View>
-
-            <Input
-              label="Email Address"
-              value={email}
-              onChangeText={setEmail}
-              placeholder="Enter your email"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              disabled={isLoading}
-              leftSection={<IconMail size={20} color="#1976d2" />}
             />
           </View>
 

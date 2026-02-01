@@ -1,36 +1,38 @@
 import { useRouter } from "expo-router";
 import React from "react";
 import { ICEForm, ICEFormData } from "../../../../components/organisms/ice";
-import { useAppDispatch, useICEProfile } from "../../../../context/AppContext";
-import { ICEProfile } from "../../../../types";
+import {
+  useAppDispatch,
+  useICEProfile,
+  useUser,
+} from "../../../../context/AppContext";
+import { DatabaseService } from "../../../../lib/database";
 
 export default function EditICEPage() {
   const router = useRouter();
   const iceProfile = useICEProfile();
   const dispatch = useAppDispatch();
+  const user = useUser();
 
-  const handleSave = (data: ICEFormData) => {
-    const profile: ICEProfile = {
-      id: iceProfile?.id || Date.now().toString(),
-      userId: "current-user",
-      bloodType: data.bloodType,
-      allergies: data.allergies,
-      medications: data.medications,
-      medicalConditions: data.medicalConditions,
-      emergencyContacts: data.emergencyContacts,
-      organDonor: data.organDonor,
-      specialInstructions: data.specialInstructions,
-      createdAt: iceProfile?.createdAt || new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
+  const handleSave = async (data: ICEFormData) => {
+    if (!user) return;
 
-    if (iceProfile) {
-      dispatch({ type: "UPDATE_ICE_PROFILE", payload: profile });
-    } else {
+    try {
+      const profile = await DatabaseService.saveICEProfile(user.id, {
+        bloodType: data.bloodType,
+        allergies: data.allergies,
+        medications: data.medications,
+        medicalConditions: data.medicalConditions,
+        emergencyContacts: data.emergencyContacts,
+        organDonor: data.organDonor,
+        specialInstructions: data.specialInstructions,
+      });
+
       dispatch({ type: "SET_ICE_PROFILE", payload: profile });
+      router.replace("/(pages)");
+    } catch (error) {
+      console.error("Failed to save ICE profile:", error);
     }
-
-    router.back();
   };
 
   const handleCancel = () => {

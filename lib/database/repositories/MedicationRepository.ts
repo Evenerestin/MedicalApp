@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import * as Crypto from "expo-crypto";
 import { Medication } from "../../../types";
 import { dbManager } from "../DatabaseManager";
 
@@ -7,27 +7,29 @@ export class MedicationRepository {
     userId: string,
     data: Omit<Medication, "id" | "createdAt" | "updatedAt">,
   ): Promise<Medication> {
-    const id = uuidv4();
+    const id = Crypto.randomUUID();
     const now = new Date().toISOString();
 
     await dbManager.insert(
       `
       INSERT INTO medications (
-        id, userId, name, dosage, frequency, route, reason,
-        startDate, endDate, active, createdAt, updatedAt
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        id, userId, name, dosage, unit, frequency, times, remindersEnabled, notes,
+        isActive, startDate, endDate, createdAt, updatedAt
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
       [
         id,
         userId,
         data.name,
         data.dosage,
+        data.unit || "tablets",
         data.frequency,
-        "",
-        "",
+        JSON.stringify(data.times || []),
+        data.remindersEnabled ? 1 : 0,
+        data.notes || "",
+        data.isActive ? 1 : 0,
         data.startDate || "",
         data.endDate || "",
-        data.isActive ? 1 : 0,
         now,
         now,
       ],
@@ -53,13 +55,13 @@ export class MedicationRepository {
       userId: row.userId,
       name: row.name,
       dosage: row.dosage,
-      unit: "mg" as const,
+      unit: row.unit || "tablets",
       frequency: row.frequency,
       startDate: row.startDate,
       endDate: row.endDate,
-      isActive: row.active === 1,
-      times: [],
-      remindersEnabled: false,
+      isActive: row.isActive === 1,
+      times: row.times ? JSON.parse(row.times) : [],
+      remindersEnabled: row.remindersEnabled === 1,
       notes: row.notes || "",
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
@@ -68,7 +70,7 @@ export class MedicationRepository {
 
   static async getActiveMedications(userId: string): Promise<Medication[]> {
     const results = await dbManager.getAll(
-      "SELECT * FROM medications WHERE userId = ? AND active = 1 ORDER BY createdAt DESC",
+      "SELECT * FROM medications WHERE userId = ? AND isActive = 1 ORDER BY createdAt DESC",
       [userId],
     );
     return results.map((row: any) => ({
@@ -76,13 +78,13 @@ export class MedicationRepository {
       userId: row.userId,
       name: row.name,
       dosage: row.dosage,
-      unit: "mg" as const,
+      unit: row.unit || "tablets",
       frequency: row.frequency,
       startDate: row.startDate,
       endDate: row.endDate,
-      isActive: row.active === 1,
-      times: [],
-      remindersEnabled: false,
+      isActive: row.isActive === 1,
+      times: row.times ? JSON.parse(row.times) : [],
+      remindersEnabled: row.remindersEnabled === 1,
       notes: row.notes || "",
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
@@ -101,13 +103,13 @@ export class MedicationRepository {
       userId: row.userId,
       name: row.name,
       dosage: row.dosage,
-      unit: "mg" as const,
+      unit: row.unit || "tablets",
       frequency: row.frequency,
       startDate: row.startDate,
       endDate: row.endDate,
-      isActive: row.active === 1,
-      times: [],
-      remindersEnabled: false,
+      isActive: row.isActive === 1,
+      times: row.times ? JSON.parse(row.times) : [],
+      remindersEnabled: row.remindersEnabled === 1,
       notes: row.notes || "",
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
@@ -130,9 +132,25 @@ export class MedicationRepository {
       updates.push("dosage = ?");
       values.push(data.dosage);
     }
+    if (data.unit !== undefined) {
+      updates.push("unit = ?");
+      values.push(data.unit);
+    }
     if (data.frequency !== undefined) {
       updates.push("frequency = ?");
       values.push(data.frequency);
+    }
+    if (data.times !== undefined) {
+      updates.push("times = ?");
+      values.push(JSON.stringify(data.times));
+    }
+    if (data.remindersEnabled !== undefined) {
+      updates.push("remindersEnabled = ?");
+      values.push(data.remindersEnabled ? 1 : 0);
+    }
+    if (data.notes !== undefined) {
+      updates.push("notes = ?");
+      values.push(data.notes);
     }
     if (data.startDate !== undefined) {
       updates.push("startDate = ?");
@@ -143,7 +161,7 @@ export class MedicationRepository {
       values.push(data.endDate);
     }
     if (data.isActive !== undefined) {
-      updates.push("active = ?");
+      updates.push("isActive = ?");
       values.push(data.isActive ? 1 : 0);
     }
 

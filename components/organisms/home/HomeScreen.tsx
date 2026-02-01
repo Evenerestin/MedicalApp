@@ -9,6 +9,7 @@ import {
   Medication,
   VitalMeasurement,
 } from "../../../types";
+import { AppointmentsList } from "../appointments/list";
 import { styles } from "./Home.styles";
 
 export interface HomeScreenProps {
